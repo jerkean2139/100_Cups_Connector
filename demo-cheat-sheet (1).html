@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#1a1410" />
+<meta name="supported-color-schemes" content="light" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>Demo Cheat Sheet · Phone Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #0d0a08;
+    --paper: #f4ede0;
+    --paper-deep: #ebe1d0;
+    --coffee-deep: #3d1d09;
+    --gold: #d4a347;
+    --gold-bright: #e6b94d;
+    --rust: #b54d2c;
+    --sage: #5e7553;
+    --line: rgba(244, 237, 224, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.4;
+    font-size: 16px;
+    min-height: 100vh;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root { color-scheme: light; }
+    body {
+      background: var(--ink) !important;
+      color: var(--paper) !important;
+    }
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* === STICKY HEADER === */
+  .sticky-header {
+    background: var(--rust);
+    color: var(--paper);
+    padding: 10px 16px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  /* === HERO === */
+  .hero {
+    padding: 24px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .hero-mark .num { color: var(--rust); font-style: italic; }
+  .hero-mark .word { color: var(--paper); text-transform: lowercase; }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .hero-title em { color: var(--gold); font-style: italic; }
+
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+  }
+
+  /* === SECTION === */
+  section {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+
+  .section-tag.urgent {
+    background: var(--rust);
+    color: var(--paper);
+  }
+
+  .section-tag.danger {
+    background: var(--rust);
+    color: var(--paper);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  h2 em { color: var(--gold); font-style: italic; }
+
+  /* === TIMELINE STEPS === */
+  .timeline {
+    margin: 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .timeline-item:last-child {
+    border-bottom: none;
+  }
+
+  .timeline-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .timeline-time {
+    display: inline-block;
+    background: rgba(244, 237, 224, 0.1);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+  }
+
+  .timeline-what {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+
+  .timeline-where {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+  }
+
+  .timeline-say {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--paper-deep);
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 12px;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .timeline-say::before {
+    content: 'SAY';
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    background: rgba(212, 163, 71, 0.15);
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* === COPY BLOCK === */
+  .copy-block {
+    position: relative;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(244, 237, 224, 0.2);
+    color: var(--paper);
+    border-radius: 4px;
+    padding: 12px 50px 12px 14px;
+    margin: 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    background: var(--gold);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    padding: 0;
+  }
+
+  .copy-btn:active {
+    background: var(--sage);
+    color: var(--paper);
+  }
+
+  .copy-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .copy-btn.copied {
+    background: var(--sage);
+    color: var(--paper);
+  }
+
+  /* === TIMELINE QUICK COPY (compact, inline under timeline phases) === */
+  .timeline-copy {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(212, 163, 71, 0.1);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .timeline-copy-text {
+    flex: 1;
+    min-width: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--paper);
+    word-break: break-all;
+  }
+
+  .timeline-copy-label {
+    display: block;
+    font-size: 9px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 3px;
+    font-weight: 700;
+  }
+
+  .timeline-copy-btn {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .timeline-copy-btn svg { width: 13px; height: 13px; }
+  .timeline-copy-btn.copied { background: var(--sage); color: var(--paper); }
+  .timeline-copy-btn:active { background: var(--sage); color: var(--paper); }
+
+  /* === RECOVERY GRID === */
+  .recovery {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .recovery-item {
+    background: rgba(181, 77, 44, 0.12);
+    border-left: 3px solid var(--rust);
+    padding: 10px 14px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .recovery-if {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--rust);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .recovery-do {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--paper);
+  }
+
+  /* === REMINDER STRIP === */
+  .reminder-strip {
+    background: var(--gold);
+    color: var(--ink);
+    padding: 14px 18px;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.3;
+    border-radius: 4px;
+    margin: 12px 0;
+  }
+
+  .reminder-strip.dark {
+    background: var(--coffee-deep);
+    color: var(--paper);
+  }
+
+  /* === FOOTER === */
+  footer {
+    text-align: center;
+    padding: 24px 20px;
+    color: var(--gold);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  /* === MOBILE TIGHTEN === */
+  @media (max-width: 480px) {
+    .hero { padding: 20px 16px 18px; }
+    section { padding: 20px 16px; }
+    .hero-title { font-size: 20px; }
+    .timeline-num { width: 32px; height: 32px; font-size: 16px; }
+    .timeline-item { grid-template-columns: 40px 1fr; gap: 12px; }
+    .timeline-what { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">⚡ DEMO DAY · CHEAT SHEET ⚡</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-mark">
+      <span class="num">100</span><span class="word">cups</span>
+    </div>
+    <h1 class="hero-title">Tomorrow's <em>flow.</em></h1>
+    <div class="hero-sub">Glance · Don't Memorize · Trust the Plan</div>
+  </header>
+
+  <!-- THE 3 URLS YOU'LL NEED -->
+  <section>
+    <span class="section-tag">Open These Tabs · Before You Start</span>
+    <h2>Three URLs. <em>Three tabs.</em></h2>
+
+    <div style="font-size: 12px; color: var(--gold); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em;">Tab 1 · Claude Project (planning)</div>
+    <div class="copy-block">
+      claude.ai
+      <button class="copy-btn" onclick="copyUrl('https://claude.ai', this)" aria-label="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    <div style="font-size: 12px; color: var(--gold); margin-bottom: 6px; margin-top: 16px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em;">Tab 2 · Claude Code (build)</div>
+    <div class="copy-block">
+      claude.ai/code
+      <button class="copy-btn" onclick="copyUrl('https://claude.ai/code', this)" aria-label="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    <div style="font-size: 12px; color: var(--gold); margin-bottom: 6px; margin-top: 16px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.12em;">Tab 3 · GitHub repo (where PRD lives)</div>
+    <div class="copy-block">
+      github.com/keanonbiz/100cups-connector
+      <button class="copy-btn" onclick="copyUrl('https://github.com/keanonbiz/100cups-connector', this)" aria-label="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    <div class="reminder-strip" style="margin-top: 18px;">
+      Plus a 4th tab on your other monitor: presenter-runbook.html (DO NOT SHARE)
+    </div>
+  </section>
+
+  <!-- THE 6 PHASE FLOW -->
+  <section>
+    <span class="section-tag">The Flow · 60 Minutes</span>
+    <h2>Six phases. <em>One hour.</em></h2>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-num">1</div>
+        <div>
+          <div class="timeline-time">10 min · CLAUDE PROJECT</div>
+          <div class="timeline-what">Mine the meeting</div>
+          <div class="timeline-where">→ Tab 1 (Claude Project) · paste extractor prompt + transcript</div>
+          <div class="timeline-say">Last week Phyllis dropped this idea. Byron flagged the danger of auto-sending. Today we turn that conversation into a working app.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-num">2</div>
+        <div>
+          <div class="timeline-time">10 min · CLAUDE PROJECT</div>
+          <div class="timeline-what">Run the planning interview</div>
+          <div class="timeline-where">→ Same project · skill is loaded as project knowledge</div>
+          <div class="timeline-say">The skill is doing the structured thinking so I don't have to remember to. Watch the scope guard call out things we'd be tempted to add.</div>
+          <div class="timeline-copy">
+            <div class="timeline-copy-text">
+              <span class="timeline-copy-label">Paste this</span>
+              Use the idea-to-prd skill. Here's my brief: [paste]
+            </div>
+            <button class="timeline-copy-btn" onclick="copyUrl('Use the idea-to-prd skill. Here\u2019s my brief: [paste the structured brief from Phase 1 here]', this)" aria-label="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-num">3</div>
+        <div>
+          <div class="timeline-time">2 min · GITHUB</div>
+          <div class="timeline-what">Save PRD to repo as PRD.md</div>
+          <div class="timeline-where">→ Tab 3 (GitHub) · Add file → Create new file → name it PRD.md</div>
+          <div class="timeline-say">I'm saving this to the repo as a file. Six months from now I can look at this and remember exactly what we built and why.</div>
+          <div class="timeline-copy">
+            <div class="timeline-copy-text">
+              <span class="timeline-copy-label">Filename</span>
+              PRD.md
+            </div>
+            <button class="timeline-copy-btn" onclick="copyUrl('PRD.md', this)" aria-label="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-num">4</div>
+        <div>
+          <div class="timeline-time">35 min · CLAUDE CODE</div>
+          <div class="timeline-what">Cloud mode + read PRD.md + build</div>
+          <div class="timeline-where">→ Tab 2 (Claude Code) · Cloud · main branch · point at repo</div>
+          <div class="timeline-say">Read PRD.md from the repo and build it end-to-end. Then I'm going to step away. While Claude builds, let me walk you through how I got here.</div>
+          <div class="timeline-copy">
+            <div class="timeline-copy-text">
+              <span class="timeline-copy-label">Build prompt</span>
+              Read PRD.md from this repo and build it end-to-end. Follow the strict build order. ASK before scope-cutting.
+            </div>
+            <button class="timeline-copy-btn" onclick="copyUrl('Read PRD.md from this repo and build it end-to-end. Follow the strict build order. After each major step, run any tests that exist for it. If anything in the MVP list seems too hard for one-shot, ASK before scope-cutting. At the end, output the deployed URL and pass/fail status of each test.', this)" aria-label="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-num">5</div>
+        <div>
+          <div class="timeline-time">PARALLEL · RAILWAY</div>
+          <div class="timeline-what">Set up Railway in parallel</div>
+          <div class="timeline-where">→ railway.com · connect repo · two environments</div>
+          <div class="timeline-say">While Claude is building, let me set up where this is going to live. Railway watches the repo and auto-deploys.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-num">6</div>
+        <div>
+          <div class="timeline-time">10 min · PHONE</div>
+          <div class="timeline-what">Demo on phone + drop playbook link</div>
+          <div class="timeline-where">→ Open Railway URL on phone · share screen</div>
+          <div class="timeline-say">Phyllis had the idea. Byron told us how to keep it human. The code is just the wrapper. Who's going to vibe code something this week?</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE PLAYBOOK URL TO DROP -->
+  <section>
+    <span class="section-tag urgent">Drop in Chat · Final Phase</span>
+    <h2>Share the <em>playbook.</em></h2>
+
+    <div class="copy-block" style="font-size: 11px;">
+      claude.ai/public/artifacts/48a34448-8693-48ff-b9da-7ef828d4c1c6
+      <button class="copy-btn" onclick="copyUrl('https://claude.ai/public/artifacts/48a34448-8693-48ff-b9da-7ef828d4c1c6', this)" aria-label="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    <div class="reminder-strip dark">
+      Tap the icon → URL is in your clipboard → paste in Zoom chat
+    </div>
+  </section>
+
+  <!-- RECOVERY MOVES -->
+  <section>
+    <span class="section-tag danger">If Something Breaks</span>
+    <h2>Stay calm. <em>Have a move.</em></h2>
+
+    <div class="recovery">
+
+      <div class="recovery-item">
+        <div class="recovery-if">If your Claude project is slow or stuck</div>
+        <div class="recovery-do">Switch to claude.ai with the SKILL.md pasted as the first message. Same outcome.</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If Claude Code can't see the PRD.md file</div>
+        <div class="recovery-do">Just paste the PRD content directly into Claude Code's chat. Same build, slightly less elegant.</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If the build errors out mid-build</div>
+        <div class="recovery-do">Type "continue" and hit Enter. If still stuck, paste the error back to it: "Fix this and continue."</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If Railway deploy fails</div>
+        <div class="recovery-do">Skip it. Show the working code in Claude Code. Say: "I'll deploy after — that part's not the lesson."</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If the demo runs over time</div>
+        <div class="recovery-do">Skip Phase 5 (Railway) entirely. Show what was built locally in Claude Code. Drop playbook link, take questions.</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If your internet dies</div>
+        <div class="recovery-do">Switch to phone hotspot. Stay calm. Say: "AI demos require internet. Welcome to my world."</div>
+      </div>
+
+      <div class="recovery-item">
+        <div class="recovery-if">If you go totally blank</div>
+        <div class="recovery-do">Open the audience page on the projector. Walk through the four acts as your own outline. They were built for exactly this moment.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TALKING POINTS -->
+  <section>
+    <span class="section-tag">Anchor Lines · Use If Lost</span>
+    <h2>Lines that <em>always work.</em></h2>
+
+    <div class="reminder-strip dark" style="text-align: left; font-style: italic; font-size: 15px; padding: 14px 18px;">
+      <strong style="font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold); display: block; margin-bottom: 6px;">OPENING</strong>
+      Phyllis had the idea. Byron made it human. Michael added LinkedIn. David gave it voice.
+    </div>
+
+    <div class="reminder-strip dark" style="text-align: left; font-style: italic; font-size: 15px; padding: 14px 18px;">
+      <strong style="font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold); display: block; margin-bottom: 6px;">WHILE WAITING</strong>
+      Three weeks ago I couldn't do this either. I'm sending you the exact playbook.
+    </div>
+
+    <div class="reminder-strip dark" style="text-align: left; font-style: italic; font-size: 15px; padding: 14px 18px;">
+      <strong style="font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold); display: block; margin-bottom: 6px;">THE LESSON</strong>
+      The hardest part isn't the prompting. It's knowing when to stop adding features.
+    </div>
+
+    <div class="reminder-strip dark" style="text-align: left; font-style: italic; font-size: 15px; padding: 14px 18px;">
+      <strong style="font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold); display: block; margin-bottom: 6px;">CLOSING</strong>
+      If you build something with this kit, send it to me. I'm keeping a list.
+    </div>
+  </section>
+
+  <!-- TONIGHT'S SETUP CHECK -->
+  <section>
+    <span class="section-tag">Tonight · Setup Done?</span>
+    <h2>Before tomorrow, <em>verify these.</em></h2>
+
+    <div class="recovery">
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">Accounts ✓</div>
+        <div class="recovery-do">Claude Pro+ · GitHub · Railway · all logged in on your demo machine</div>
+      </div>
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">GitHub repo ✓</div>
+        <div class="recovery-do">Empty repo created with README · URL ready to paste into Claude Code</div>
+      </div>
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">Claude Project ✓</div>
+        <div class="recovery-do">SKILL.md + BRAND_VOICE.md uploaded as Project Knowledge · custom instructions set</div>
+      </div>
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">Test conversation ✓</div>
+        <div class="recovery-do">Asked Claude what skill is loaded · it described SKILL.md correctly</div>
+      </div>
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">Auto-accept plan ✓</div>
+        <div class="recovery-do">Know to click "Allow always for this session" when Claude Code asks · or settings.json ready</div>
+      </div>
+      <div class="recovery-item" style="background: rgba(94, 117, 83, 0.15); border-left-color: var(--sage);">
+        <div class="recovery-if" style="color: var(--sage);">Tabs pre-staged ✓</div>
+        <div class="recovery-do">Three tabs open: Claude Project, Claude Code, GitHub repo · cheat sheet on phone</div>
+      </div>
+    </div>
+
+    <div class="reminder-strip dark" style="margin-top: 16px;">
+      Full setup walkthrough lives at the bottom of the audience page · projects-setup.md has the deep version
+    </div>
+  </section>
+
+  <!-- BREATHE -->
+  <section>
+    <span class="section-tag">The Reminder</span>
+    <h2>Before you <em>start.</em></h2>
+
+    <div class="reminder-strip">
+      You've practiced this. Trust the page on the projector. Trust the runbook on your second monitor. The audience is rooting for you. ☕
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  ~ go build something the room will remember ~
+</footer>
+
+<script>
+  function copyUrl(url, btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => onCopy(btn)).catch(() => legacyCopy(url, btn));
+    } else {
+      legacyCopy(url, btn);
+    }
+  }
+
+  function legacyCopy(text, btn) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      onCopy(btn);
+    } catch (e) {}
+  }
+
+  function onCopy(btn) {
+    btn.classList.add('copied');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = originalHTML;
+    }, 1500);
+  }
+</script>
+
+</body>
+</html>

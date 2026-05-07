@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#f4ede0" />
+<meta name="supported-color-schemes" content="light" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<title>Advanced Setup — Vibe Coder's Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #1a1410;
+    --paper: #f4ede0;
+    --paper-deep: #ebe1d0;
+    --paper-deeper: #ddd0b8;
+    --coffee: #6b3410;
+    --coffee-deep: #3d1d09;
+    --crema: #c89d63;
+    --gold: #d4a347;
+    --rust: #b54d2c;
+    --sage: #5e7553;
+    --line: rgba(26, 20, 16, 0.12);
+    --line-strong: rgba(26, 20, 16, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.55;
+    font-size: 16px;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(212, 163, 71, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 85% 70%, rgba(181, 77, 44, 0.06) 0%, transparent 45%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .breadcrumb {
+    padding: 20px 0 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--coffee);
+  }
+
+  .breadcrumb a {
+    color: var(--rust);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border 0.15s;
+  }
+
+  .breadcrumb a:hover { border-bottom-color: var(--rust); }
+
+  .hero {
+    padding: 40px 0 56px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .hero-logo {
+    display: block;
+    height: auto;
+    width: auto;
+    max-width: min(220px, 60vw);
+    max-height: 90px;
+    object-fit: contain;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 2px 4px rgba(26, 20, 16, 0.08));
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    margin-bottom: 24px;
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(181, 77, 44, 0.08);
+    border: 1px solid rgba(181, 77, 44, 0.2);
+    border-radius: 100px;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--rust); }
+
+  .hero-sub {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--coffee-deep);
+    max-width: 680px;
+    line-height: 1.4;
+    margin-bottom: 24px;
+  }
+
+  .hero-tag {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--coffee);
+    margin-top: 16px;
+  }
+
+  section {
+    padding: 56px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+
+  h2 em { font-style: italic; color: var(--rust); }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 28px 0 10px;
+  }
+
+  h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--coffee-deep);
+    margin: 20px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lede {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--coffee-deep);
+    max-width: 680px;
+    line-height: 1.45;
+    margin-bottom: 28px;
+  }
+
+  p { margin-bottom: 14px; max-width: 720px; }
+
+  strong { color: var(--coffee-deep); font-weight: 700; }
+
+  ul, ol { margin: 12px 0 14px 24px; max-width: 720px; }
+  li { margin-bottom: 6px; line-height: 1.6; }
+
+  code {
+    background: rgba(0, 0, 0, 0.08);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    color: var(--coffee-deep);
+  }
+
+  pre {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 22px;
+    border-left: 3px solid var(--gold);
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    border-radius: 0 3px 3px 0;
+  }
+
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+
+  .layer-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--ink);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .diagram-block {
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+
+  .diagram-block svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram-caption {
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--coffee);
+    margin-top: 8px;
+  }
+
+  .callout {
+    background: rgba(212, 163, 71, 0.12);
+    border-left: 4px solid var(--gold);
+    padding: 18px 22px;
+    margin: 20px 0;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .callout-warning {
+    background: rgba(181, 77, 44, 0.08);
+    border-left-color: var(--rust);
+  }
+
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .callout p { margin-bottom: 6px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .step {
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 24px 26px;
+    margin: 18px 0;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+  }
+
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--gold);
+    letter-spacing: -0.04em;
+  }
+
+  .step-content h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .step-content p:last-child { margin-bottom: 0; }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin: 24px 0;
+  }
+
+  .compare-card {
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 22px 24px;
+  }
+
+  .compare-card.dark {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .compare-card.dark h3 { color: var(--gold); }
+  .compare-card.dark strong { color: var(--gold); }
+  .compare-card.dark code {
+    background: rgba(212, 163, 71, 0.2);
+    color: var(--gold);
+  }
+
+  .compare-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .compare-card.dark .compare-tag { color: var(--gold); }
+
+  .cta-block {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 36px;
+    margin: 32px 0;
+    text-align: center;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: var(--gold);
+  }
+
+  .cta-block h2 {
+    color: var(--paper);
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .cta-block h2 em { color: var(--gold); }
+
+  .cta-block p {
+    color: var(--paper-deep);
+    font-size: 17px;
+    max-width: 540px;
+    margin: 0 auto 24px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 14px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.15s;
+    margin: 6px;
+  }
+
+  .cta-btn:hover {
+    background: var(--paper);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--gold);
+  }
+
+  .cta-btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 2px solid var(--gold);
+  }
+
+  .cta-btn-outline:hover {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .marginalia {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--rust);
+    border-left: 2px solid var(--gold);
+    padding: 4px 0 4px 16px;
+    margin: 20px 0;
+    max-width: 620px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 60px 0 80px;
+    border-top: 4px double var(--ink);
+    margin-top: 32px;
+  }
+
+  .footer-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--coffee-deep);
+    margin-bottom: 10px;
+  }
+
+  .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--coffee);
+  }
+
+  /* === COLLAPSIBLE ACT (the live walk-through) === */
+  .act {
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    margin: 18px 0;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .act.expanded {
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .act-header {
+    padding: 22px 26px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 18px;
+    align-items: center;
+    transition: background 0.15s;
+  }
+
+  .act-header:hover {
+    background: rgba(212, 163, 71, 0.08);
+  }
+
+  .act-num-badge {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--gold);
+    letter-spacing: -0.04em;
+  }
+
+  .act-header-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .act-header-meta {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  .act-time-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 6px 12px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .act-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 18px;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .act.expanded .act-toggle {
+    transform: rotate(45deg);
+  }
+
+  .act-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    border-top: 0 solid var(--line-strong);
+  }
+
+  .act.expanded .act-body {
+    max-height: 8000px;
+    border-top-width: 1px;
+  }
+
+  .act-body-inner {
+    padding: 8px 26px 24px;
+  }
+
+  .act-intro {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--coffee-deep);
+    line-height: 1.5;
+    padding: 14px 0 18px;
+    border-bottom: 1px dashed var(--line-strong);
+    margin-bottom: 6px;
+  }
+
+  /* === STEP ROW === */
+  .step-row {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .step-row:last-of-type {
+    border-bottom: none;
+  }
+
+  .step-check {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    border-radius: 4px;
+    margin-top: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .step-check:hover {
+    background: var(--paper-deeper);
+  }
+
+  .step-check.done {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  .step-check.done::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    color: var(--paper);
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-content {
+    transition: opacity 0.2s;
+    cursor: pointer;
+  }
+
+  .step-row.done .step-content {
+    opacity: 0.55;
+  }
+
+  .step-what {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .step-row.done .step-what {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--coffee);
+  }
+
+  .step-why {
+    background: rgba(212, 163, 71, 0.1);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 0 3px 3px 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--coffee-deep);
+    margin-bottom: 12px;
+  }
+
+  .step-why::before {
+    content: 'WHY THIS WAY';
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .step-cmd {
+    margin-top: 10px;
+  }
+
+  .step-cmd pre {
+    margin: 0;
+    font-size: 12px;
+    padding: 14px 18px;
+  }
+
+  /* === ACT-LEVEL TAKEAWAY === */
+  .act-takeaway {
+    margin-top: 22px;
+    padding: 18px 22px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 4px;
+    border-left: 4px solid var(--gold);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .act-takeaway::before {
+    content: 'WHAT YOU LEAVE WITH';
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* === EXPAND ALL CONTROL === */
+  .expand-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin: 14px 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .expand-controls button {
+    background: transparent;
+    color: var(--coffee);
+    border: 1px solid var(--coffee);
+    padding: 6px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    transition: all 0.15s;
+  }
+
+  .expand-controls button:hover {
+    background: var(--coffee);
+    color: var(--paper);
+  }
+
+  @media (max-width: 720px) {
+    .hero { padding: 32px 0 40px; }
+    section { padding: 40px 0; }
+    .container { padding: 0 18px; }
+    .step { grid-template-columns: 40px 1fr; gap: 14px; padding: 20px; }
+    .step-num { font-size: 32px; }
+    .cta-block { padding: 32px 22px; }
+    .act-header {
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      padding: 18px 20px;
+    }
+    .act-num-badge { font-size: 26px; }
+    .act-header-title { font-size: 17px; }
+    .act-time-pill {
+      grid-column: 1 / -1;
+      justify-self: start;
+      margin-top: 6px;
+    }
+    .act-body-inner { padding: 8px 20px 20px; }
+    .step-what { font-size: 16px; }
+    .step-why { font-size: 14px; }
+  }
+
+  /* === COPY BLOCK · Notion-style === */
+  pre {
+    position: relative;
+  }
+
+  pre .pre-copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    background: rgba(244, 237, 224, 0.08);
+    border: 1px solid rgba(244, 237, 224, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a8a8a8;
+    transition: all 0.15s;
+    padding: 0;
+    z-index: 2;
+  }
+
+  pre .pre-copy-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+
+  pre .pre-copy-btn svg {
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+  }
+
+  pre .pre-copy-btn.copied {
+    background: var(--sage);
+    color: var(--paper);
+    border-color: var(--sage);
+  }
+
+  .copy-block {
+    position: relative;
+    background: #1a1a1a;
+    color: #e8e8e8;
+    border-radius: 6px;
+    padding: 18px 56px 18px 22px;
+    margin: 12px 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    border: 1px solid #2a2a2a;
+    transition: border-color 0.2s;
+  }
+
+  .copy-block:hover {
+    border-color: var(--gold);
+  }
+
+  .copy-block .copy-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-block.single-line .copy-content {
+    white-space: nowrap;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: rgba(244, 237, 224, 0.08);
+    border: 1px solid rgba(244, 237, 224, 0.15);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    color: #a8a8a8;
+    padding: 0;
+  }
+
+  .copy-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+
+  .copy-btn svg {
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+  }
+
+  .copy-btn.copied {
+    background: var(--sage);
+    color: var(--paper);
+    border-color: var(--sage);
+  }
+
+  .copy-toast {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    background: var(--sage);
+    color: var(--paper);
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+
+  .copy-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .copy-hidden {
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.15s;
+  }
+
+  .copy-hidden:hover {
+    background: var(--paper-deeper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .copy-hidden-meta { flex: 1; min-width: 0; }
+  .copy-hidden-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .copy-hidden-desc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--coffee);
+  }
+  .copy-hidden-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-hidden-btn:hover { background: var(--gold); color: var(--ink); }
+  .copy-hidden-btn svg { width: 14px; height: 14px; }
+  .copy-hidden-btn.copied { background: var(--sage); color: var(--paper); }
+
+  .takeaway-section {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 40px;
+    border-radius: 6px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .takeaway-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--gold), var(--rust), var(--gold));
+  }
+  .takeaway-section h2 {
+    color: var(--paper);
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+  .takeaway-section h2 em { color: var(--gold); }
+  .takeaway-section .lede { color: var(--paper-deep); margin-bottom: 28px; }
+  .takeaway-section .copy-hidden {
+    background: rgba(244, 237, 224, 0.04);
+    border-color: rgba(244, 237, 224, 0.15);
+  }
+  .takeaway-section .copy-hidden:hover {
+    background: rgba(244, 237, 224, 0.08);
+    box-shadow: 3px 3px 0 var(--gold);
+  }
+  .takeaway-section .copy-hidden-title { color: var(--paper); }
+  .takeaway-section .copy-hidden-desc { color: var(--crema); }
+  .takeaway-section .copy-hidden-btn { background: var(--gold); color: var(--ink); }
+  .takeaway-section .copy-hidden-btn:hover { background: var(--paper); }
+
+  @media (max-width: 720px) {
+    .copy-block { padding: 14px 50px 14px 16px; font-size: 12px; }
+    .copy-hidden { flex-direction: column; align-items: stretch; gap: 12px; }
+    .copy-hidden-btn { justify-content: center; }
+    .takeaway-section { padding: 32px 22px; }
+    .takeaway-section h2 { font-size: 26px; }
+  }
+
+  /* === COLLAPSIBLE COPY BLOCK · for long content (transcript prompt etc) === */
+  .copy-collapsible {
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    margin: 14px 0 4px;
+    overflow: hidden;
+  }
+
+  .copy-collapsible-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--paper-deep);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .copy-collapsible-bar:hover { background: var(--paper-deeper, #e3d8c4); }
+
+  .copy-collapsible-meta { flex: 1; min-width: 0; }
+
+  .copy-collapsible-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .copy-collapsible-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .copy-collapsible-toggle {
+    background: transparent;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .copy-collapsible-toggle:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .copy-collapsible-toggle .toggle-arrow {
+    transition: transform 0.2s;
+    font-size: 9px;
+  }
+
+  .copy-collapsible.expanded .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+  .copy-collapsible-copy-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .copy-collapsible-copy-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .copy-collapsible-copy-btn.copied {
+    background: var(--sage);
+    color: var(--paper);
+  }
+
+  .copy-collapsible-copy-btn svg { width: 12px; height: 12px; }
+
+  .copy-collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #1a1a1a;
+  }
+
+  .copy-collapsible.expanded .copy-collapsible-content {
+    max-height: 800px;
+    overflow-y: auto;
+  }
+
+  .copy-collapsible-content pre {
+    color: #e8e8e8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.55;
+    padding: 18px 22px;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  @media (max-width: 720px) {
+    .copy-collapsible-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .copy-collapsible-actions { justify-content: stretch; }
+    .copy-collapsible-toggle, .copy-collapsible-copy-btn { flex: 1; justify-content: center; }
+  }
+
+  /* === FLIP BUTTON · top-right toggle to audience page === */
+  .flip-button {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1.5px solid var(--gold);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0 var(--gold);
+  }
+
+  .flip-button:hover {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .flip-button svg { width: 13px; height: 13px; }
+
+  /* === JOURNEY DIAGRAM · 50k overview === */
+  .journey-section {
+    padding: 36px 0 28px;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .journey-eyebrow {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--coffee);
+    margin-bottom: 6px;
+  }
+
+  .journey-headline {
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+
+  .journey-headline em { color: var(--rust); font-style: italic; }
+
+  .journey-svg-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 8px 4px 12px;
+  }
+
+  .journey-svg {
+    min-width: 920px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .journey-svg-inner { filter: url(#wobble); }
+
+  .journey-svg .station-circle {
+    fill: var(--paper-deep);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+
+  .journey-svg .station-circle.gold-fill { fill: var(--gold); }
+
+  .journey-svg .station-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 28px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .journey-svg .station-label {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 17px;
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+
+  .journey-svg .station-tool {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    fill: var(--coffee);
+    text-anchor: middle;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .journey-svg .station-time {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--rust);
+    text-anchor: middle;
+    letter-spacing: 0.01em;
+  }
+
+  .journey-svg .arrow-line {
+    stroke: var(--coffee);
+    stroke-width: 2.2;
+    fill: none;
+  }
+
+  .journey-svg .arrow-head { fill: var(--coffee); }
+
+  .journey-svg .annotation {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--coffee-deep);
+    text-anchor: middle;
+  }
+
+  .journey-aside {
+    text-align: center;
+    margin-top: 22px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--coffee-deep);
+    line-height: 1.4;
+  }
+
+  .journey-aside strong {
+    font-style: normal;
+    color: var(--ink);
+    background: rgba(212, 163, 71, 0.18);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  /* === AUTO-ACCEPT CALLOUT === */
+  .auto-accept-callout {
+    background: var(--paper-deep);
+    border: 2px solid var(--rust);
+    border-radius: 6px;
+    padding: 22px 24px 22px;
+    margin: 22px 0;
+    position: relative;
+  }
+
+  .auto-accept-callout::before {
+    content: '⚡';
+    position: absolute;
+    top: -14px;
+    left: 22px;
+    background: var(--rust);
+    color: var(--paper);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .auto-accept-callout-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .auto-accept-callout p {
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .auto-accept-callout p:last-child { margin-bottom: 0; }
+
+  .auto-accept-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--coffee);
+  }
+
+  .auto-accept-mini-card {
+    background: var(--paper);
+    border: 1px solid var(--coffee);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+
+  .auto-accept-mini-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--rust);
+    margin-bottom: 4px;
+  }
+
+  .auto-accept-mini-text {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .auto-accept-mini-text code {
+    background: var(--paper-deep);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 11.5px;
+  }
+
+  /* === PRE-CALL SETUP SECTION === */
+  .precall-section {
+    background: var(--paper-deep);
+    padding: 56px 40px;
+    margin: 32px 0;
+    border-radius: 6px;
+    border: 2.5px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .precall-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--gold), var(--rust), var(--gold));
+  }
+
+  .precall-section .section-eyebrow { color: var(--rust); }
+
+  .precall-section h2 {
+    font-size: 38px;
+    margin-bottom: 12px;
+  }
+
+  .precall-section h2 em { color: var(--rust); }
+
+  .precall-section .lede {
+    font-size: 17px;
+    color: var(--coffee-deep);
+    margin-bottom: 32px;
+  }
+
+  .precall-phase {
+    margin: 32px 0;
+    padding: 24px 24px 22px;
+    background: var(--paper);
+    border-radius: 5px;
+    border-left: 4px solid var(--gold);
+  }
+
+  .precall-phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .precall-phase-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .precall-phase-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .precall-phase-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--rust);
+    margin-bottom: 16px;
+  }
+
+  .precall-phase-intro {
+    color: var(--coffee-deep);
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .precall-step {
+    display: flex;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(107, 52, 16, 0.2);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .precall-step:last-child { border-bottom: none; }
+  .precall-step:hover { opacity: 0.85; }
+
+  .precall-step.done .precall-step-text {
+    text-decoration: line-through;
+    opacity: 0.55;
+  }
+
+  .precall-step-check {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    background: var(--paper);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .precall-step.done .precall-step-check {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  .precall-step.done .precall-step-check::after {
+    content: '✓';
+    color: var(--paper);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .precall-step-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .precall-step-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    transition: opacity 0.15s;
+  }
+
+  .precall-step-text strong { font-weight: 700; }
+
+  .precall-step-meta {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--coffee);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .precall-final {
+    text-align: center;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 24px;
+    margin-top: 28px;
+    border-radius: 6px;
+  }
+
+  .precall-final h3 {
+    color: var(--gold);
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .precall-final p {
+    color: var(--paper-deep);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 720px) {
+    .flip-button { font-size: 10px; padding: 8px 12px; top: 10px; right: 10px; }
+    .journey-headline { font-size: 22px; }
+    .journey-section { padding: 26px 0 18px; }
+    .precall-section { padding: 36px 22px; }
+    .precall-section h2 { font-size: 26px; }
+    .precall-phase { padding: 18px 16px; }
+    .precall-phase-num { font-size: 28px; }
+    .precall-phase-title { font-size: 18px; }
+    .auto-accept-mini-grid { grid-template-columns: 1fr; gap: 10px; }
+  }
+
+  /* === Force light scheme even when user prefers dark === */
+  /* Defense against aggressive browser dark-mode auto-inversion */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: light;
+    }
+    body {
+      background: var(--paper) !important;
+      color: var(--ink) !important;
+    }
+    body::before {
+      opacity: 0.3 !important;
+    }
+  }
+
+
+  .hero-mark-fallback {
+    align-items: baseline;
+    gap: 4px;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .hero-mark-fallback .num {
+    font-size: clamp(56px, 9vw, 88px);
+    color: var(--rust);
+    font-style: italic;
+  }
+  .hero-mark-fallback .word {
+    font-size: clamp(32px, 5vw, 52px);
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    color: var(--coffee-deep);
+  }
+  .hero-mark-fallback .word::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin-right: 8px;
+    margin-bottom: 0.15em;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== FLIP TO MAIN PAGE ===== -->
+  <a href="https://claude.ai/public/artifacts/48a34448-8693-48ff-b9da-7ef828d4c1c6" target="_blank" rel="noopener" class="flip-button" title="Open the audience-friendly version">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    Audience View
+  </a>
+
+  <header class="hero">
+    <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/pMsWjanMfJ5zaAMeOIOW/media/69b1983c78565a3efb3fbb6a.png" alt="100 Cups Mastermind" class="hero-logo" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='inline-flex')" /><div class="hero-mark-fallback" style="display:none;"><span class="num">100</span><span class="word">cups</span></div>
+    <span class="hero-eyebrow">Advanced Setup · For Devs &amp; Engineers</span>
+    <h1>The same workflow,<br>with <em>professional-grade</em> infrastructure.</h1>
+    <p class="hero-sub">If you write code for a living, you'll want this version. Local development, Docker, GitHub branching strategy, automatic backups, and CI-friendly Playwright tests. The browser version is great for getting started — this is for shipping serious software.</p>
+    <div class="hero-tag">~ if you've ever rm -rf'd your home directory, you'll appreciate this ~</div>
+  </header>
+
+  <!-- ===== JOURNEY DIAGRAM · 50K OVERVIEW ===== -->
+  <section class="journey-section">
+    <div class="journey-eyebrow">The 50,000 ft View</div>
+    <h2 class="journey-headline">Six stops. <em>About an hour.</em></h2>
+
+    <div class="journey-svg-wrapper">
+      <svg class="journey-svg" viewBox="0 0 940 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="wobble" x="-2%" y="-5%" width="104%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/>
+          </filter>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b3410"/>
+          </marker>
+        </defs>
+
+        <g class="journey-svg-inner">
+          <!-- STATION 1 · IDEA -->
+          <g>
+            <circle class="station-circle" cx="80" cy="120" r="42"/>
+            <text class="station-num" x="80" y="120">1</text>
+            <text class="station-label" x="80" y="188">Idea</text>
+            <text class="station-tool" x="80" y="210">your brain · 🧠</text>
+            <text class="station-time" x="80" y="230">~ rough is fine ~</text>
+          </g>
+
+          <path class="arrow-line" d="M 124 120 Q 165 110 206 120" marker-end="url(#ah)"/>
+
+          <!-- STATION 2 · PLAN -->
+          <g>
+            <circle class="station-circle" cx="250" cy="120" r="42"/>
+            <text class="station-num" x="250" y="120">2</text>
+            <text class="station-label" x="250" y="188">Plan</text>
+            <text class="station-tool" x="250" y="210">claude project</text>
+            <text class="station-time" x="250" y="230">~ 10 min ~</text>
+          </g>
+
+          <path class="arrow-line" d="M 294 120 Q 335 110 376 120" marker-end="url(#ah)"/>
+
+          <!-- STATION 3 · PRD -->
+          <g>
+            <circle class="station-circle gold-fill" cx="420" cy="120" r="42"/>
+            <text class="station-num" x="420" y="120">3</text>
+            <text class="station-label" x="420" y="188">PRD</text>
+            <text class="station-tool" x="420" y="210">github · prd.md</text>
+            <text class="station-time" x="420" y="230">~ 2 min ~</text>
+          </g>
+
+          <path class="arrow-line" d="M 464 120 Q 505 110 546 120" marker-end="url(#ah)"/>
+
+          <!-- STATION 4 · BUILD -->
+          <g>
+            <circle class="station-circle gold-fill" cx="590" cy="120" r="42"/>
+            <text class="station-num" x="590" y="120">4</text>
+            <text class="station-label" x="590" y="188">Build</text>
+            <text class="station-tool" x="590" y="210">claude code · cli</text>
+            <text class="station-time" x="590" y="230">~ 35 min ~</text>
+          </g>
+
+          <path class="arrow-line" d="M 634 120 Q 675 110 716 120" marker-end="url(#ah)"/>
+
+          <!-- STATION 5 · DEPLOY -->
+          <g>
+            <circle class="station-circle" cx="760" cy="120" r="42"/>
+            <text class="station-num" x="760" y="120">5</text>
+            <text class="station-label" x="760" y="188">Deploy</text>
+            <text class="station-tool" x="760" y="210">railway · staging</text>
+            <text class="station-time" x="760" y="230">~ in parallel ~</text>
+          </g>
+
+          <path class="arrow-line" d="M 804 120 Q 845 110 886 120" marker-end="url(#ah)"/>
+
+          <!-- STATION 6 · DEMO -->
+          <g>
+            <circle class="station-circle" cx="900" cy="120" r="34"/>
+            <text class="station-num" x="900" y="120" style="font-size: 22px;">6</text>
+            <text class="station-label" x="900" y="178" style="font-size: 15px;">Demo</text>
+            <text class="station-tool" x="900" y="198">phone · live</text>
+            <text class="station-time" x="900" y="218" style="font-size: 11.5px;">~ 10 min ~</text>
+          </g>
+
+          <text class="annotation" x="505" y="48">↓ paste once · walk away · come back to a working app ↓</text>
+          <path class="arrow-line" d="M 420 60 Q 505 75 590 60" stroke-dasharray="3 4" opacity="0.7"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="journey-aside">
+      The trick: you'll <strong>start step 4 early</strong> — paste the build prompt, then walk through how you got there while it builds. ☕
+    </div>
+
+    <!-- AUTO-ACCEPT CALLOUT -->
+    <div class="auto-accept-callout">
+      <div class="auto-accept-callout-title">Why "walk away" actually works (CLI version)</div>
+      <p>Claude Code asks for permission before file edits and bash commands. Without auto-accept settings, you'd click "Allow" hundreds of times during a build. Two ways to skip the pauses safely:</p>
+      <div class="auto-accept-mini-grid">
+        <div class="auto-accept-mini-card">
+          <div class="auto-accept-mini-label">For this session only</div>
+          <div class="auto-accept-mini-text">In the Claude Code TUI, hit <code>shift+tab</code> repeatedly to cycle through permission modes. Land on <strong>acceptEdits</strong> for the demo.</div>
+        </div>
+        <div class="auto-accept-mini-card">
+          <div class="auto-accept-mini-label">Permanent · per-project</div>
+          <div class="auto-accept-mini-text">Drop <code>claude-settings.json</code> from the kit into <code>.claude/settings.json</code> in your repo. acceptEdits + bash allowlist · dangerous commands still blocked.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">01 · Why Go Local</span>
+    <h2>The browser version <em>has tradeoffs.</em></h2>
+    <p class="lede">Claude Code on the web is brilliant for a 60-minute demo. For real work, you'll hit walls. Here's the honest comparison.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <span class="compare-tag">Browser · claude.ai/code</span>
+        <h3>Great for:</h3>
+        <ul>
+          <li>Getting started fast</li>
+          <li>Demos and small experiments</li>
+          <li>Working from any machine</li>
+          <li>Skipping local install</li>
+        </ul>
+        <h3 style="margin-top: 18px;">Limits:</h3>
+        <ul>
+          <li>Sessions run in sandboxed VMs that get destroyed</li>
+          <li>No local file editing across sessions</li>
+          <li>Limited offline capability</li>
+          <li>No custom MCP servers or local tooling</li>
+          <li>Network access restricted by default</li>
+        </ul>
+      </div>
+
+      <div class="compare-card dark">
+        <span class="compare-tag">Terminal · claude CLI</span>
+        <h3>Great for:</h3>
+        <ul>
+          <li>Multi-session projects with persistent state</li>
+          <li>Local databases (Docker Postgres, Redis)</li>
+          <li>Custom skills, MCP servers, hooks</li>
+          <li>Serious deployments with CI/CD</li>
+          <li>Working offline on a plane</li>
+          <li>Playwright tests against local builds</li>
+        </ul>
+        <h3 style="margin-top: 18px;">Tradeoff:</h3>
+        <ul>
+          <li>Requires Node.js install</li>
+          <li>You manage your own environment</li>
+          <li>The <code>--dangerously-skip-permissions</code> flag exists. Don't use it lightly.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">The hybrid play</span>
+      <p>You don't have to pick. Use the browser version for ideation and quick experiments. Use the CLI version for production work. Claude Code supports <code>/teleport</code> to move sessions between them.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">02 · The Architecture</span>
+    <h2>Three layers. <em>One source of truth.</em></h2>
+    <p class="lede">Local for speed. GitHub for source control. Railway for deployment. Snapshot branches as parachutes. Here's how it fits together.</p>
+
+    <div class="diagram-block">
+      <svg viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="rough-f">
+            <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="11"/>
+            <feDisplacementMap in="SourceGraphic" scale="1.5"/>
+          </filter>
+          <marker id="arrow-f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1410"/>
+          </marker>
+          <marker id="arrow-fg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#d4a347"/>
+          </marker>
+          <marker id="arrow-fr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#5e7553"/>
+          </marker>
+        </defs>
+
+        <g filter="url(#rough-f)">
+          <rect x="40" y="40" width="320" height="240" rx="8" fill="#f4ede0" stroke="#1a1410" stroke-width="2.5"/>
+        </g>
+        <text x="60" y="70" font-family="JetBrains Mono" font-size="11" fill="#b54d2c" letter-spacing="2" font-weight="700">LAYER 1</text>
+        <text x="60" y="92" font-family="Fraunces" font-size="22" font-weight="800" fill="#1a1410">Your Machine</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="60" y="110" width="120" height="50" rx="4" fill="#1a1410" stroke="#1a1410"/>
+        </g>
+        <text x="120" y="132" text-anchor="middle" font-family="Fraunces" font-size="13" font-weight="700" fill="#d4a347">Claude Code</text>
+        <text x="120" y="150" text-anchor="middle" font-family="Caveat" font-size="13" fill="#f4ede0">CLI · acceptEdits</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="200" y="110" width="140" height="50" rx="4" fill="#ebe1d0" stroke="#1a1410" stroke-width="2"/>
+        </g>
+        <text x="270" y="130" text-anchor="middle" font-family="Fraunces" font-size="13" font-weight="700" fill="#1a1410">Local Repo</text>
+        <text x="270" y="150" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#6b3410">/your-project</text>
+
+        <path d="M 180 135 L 200 135" stroke="#1a1410" stroke-width="2" fill="none" filter="url(#rough-f)" marker-end="url(#arrow-f)"/>
+
+        <g filter="url(#rough-f)">
+          <rect x="60" y="190" width="280" height="70" rx="4" fill="#3d1d09" stroke="#1a1410" stroke-width="2"/>
+        </g>
+        <text x="200" y="215" text-anchor="middle" font-family="Fraunces" font-size="14" font-weight="700" fill="#d4a347">Docker Desktop</text>
+        <text x="200" y="234" text-anchor="middle" font-family="Caveat" font-size="15" fill="#f4ede0">postgres + redis · runs offline</text>
+        <text x="200" y="252" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#c89d63" letter-spacing="1">DATA SURVIVES CODE CHANGES</text>
+
+        <path d="M 270 160 L 270 190" stroke="#5e7553" stroke-width="2" fill="none" stroke-dasharray="3 3" filter="url(#rough-f)" marker-end="url(#arrow-fr)"/>
+        <text x="320" y="180" font-family="Caveat" font-size="13" fill="#5e7553">data here</text>
+
+        <path d="M 360 160 L 410 160" stroke="#d4a347" stroke-width="3" fill="none" filter="url(#rough-f)" marker-end="url(#arrow-fg)"/>
+        <text x="385" y="148" text-anchor="middle" font-family="Caveat" font-size="15" fill="#b54d2c">git push</text>
+        <text x="385" y="180" text-anchor="middle" font-family="Caveat" font-size="13" fill="#5e7553">git pull</text>
+        <path d="M 410 175 L 360 175" stroke="#5e7553" stroke-width="2" fill="none" stroke-dasharray="3 3" filter="url(#rough-f)" marker-end="url(#arrow-fr)"/>
+
+        <g filter="url(#rough-f)">
+          <rect x="410" y="60" width="280" height="200" rx="8" fill="#1a1410" stroke="#d4a347" stroke-width="2.5"/>
+        </g>
+        <text x="430" y="90" font-family="JetBrains Mono" font-size="11" fill="#d4a347" letter-spacing="2" font-weight="700">LAYER 2 · SOURCE OF TRUTH</text>
+        <text x="430" y="115" font-family="Fraunces" font-size="22" font-weight="800" fill="#f4ede0">GitHub</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="430" y="130" width="240" height="32" rx="3" fill="#3d1d09" stroke="#d4a347"/>
+        </g>
+        <text x="445" y="151" font-family="JetBrains Mono" font-size="12" fill="#f4ede0" font-weight="700">main</text>
+        <text x="495" y="151" font-family="Caveat" font-size="14" fill="#c89d63">production-ready code</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="430" y="170" width="240" height="32" rx="3" fill="#3d1d09" stroke="#d4a347"/>
+        </g>
+        <text x="445" y="191" font-family="JetBrains Mono" font-size="12" fill="#f4ede0" font-weight="700">staging</text>
+        <text x="495" y="191" font-family="Caveat" font-size="14" fill="#c89d63">latest verified work</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="430" y="210" width="240" height="32" rx="3" fill="#3d1d09" stroke="#d4a347" stroke-dasharray="4 2"/>
+        </g>
+        <text x="445" y="231" font-family="JetBrains Mono" font-size="11" fill="#f4ede0" font-weight="700">backup/2026-05-06</text>
+        <text x="445" y="247" font-family="Caveat" font-size="13" fill="#c89d63">nightly snapshot · read-only</text>
+
+        <path d="M 690 130 L 740 110" stroke="#d4a347" stroke-width="3" fill="none" filter="url(#rough-f)" marker-end="url(#arrow-fg)"/>
+        <text x="708" y="105" font-family="Caveat" font-size="13" fill="#b54d2c">auto-deploy</text>
+
+        <path d="M 690 185 L 740 195" stroke="#d4a347" stroke-width="3" fill="none" filter="url(#rough-f)" marker-end="url(#arrow-fg)"/>
+        <text x="708" y="215" font-family="Caveat" font-size="13" fill="#b54d2c">auto-deploy</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="740" y="60" width="320" height="200" rx="8" fill="#f4ede0" stroke="#1a1410" stroke-width="2.5"/>
+        </g>
+        <text x="760" y="90" font-family="JetBrains Mono" font-size="11" fill="#b54d2c" letter-spacing="2" font-weight="700">LAYER 3</text>
+        <text x="760" y="115" font-family="Fraunces" font-size="22" font-weight="800" fill="#1a1410">Railway</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="760" y="130" width="280" height="50" rx="4" fill="#ebe1d0" stroke="#1a1410" stroke-width="2"/>
+        </g>
+        <text x="900" y="152" text-anchor="middle" font-family="Fraunces" font-size="14" font-weight="700" fill="#1a1410">Production</text>
+        <text x="900" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6b3410">100cups.app · what users see</text>
+
+        <g filter="url(#rough-f)">
+          <rect x="760" y="190" width="280" height="50" rx="4" fill="#ebe1d0" stroke="#1a1410" stroke-width="2"/>
+        </g>
+        <text x="900" y="212" text-anchor="middle" font-family="Fraunces" font-size="14" font-weight="700" fill="#1a1410">Staging</text>
+        <text x="900" y="230" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6b3410">staging.100cups.app · safe to break</text>
+
+        <g filter="url(#rough-f)">
+          <ellipse cx="550" cy="295" rx="200" ry="18" fill="#5e7553" stroke="#1a1410" stroke-width="1.5"/>
+        </g>
+        <text x="550" y="300" text-anchor="middle" font-family="Caveat" font-size="16" fill="#f4ede0" font-weight="700">↻ nightly cron pushes backup branch · parachute, not merge candidate</text>
+      </svg>
+      <div class="diagram-caption">~ local for speed · github for truth · railway for deploy ~</div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">03 · Install</span>
+    <h2>Get the CLI <em>running locally.</em></h2>
+    <p class="lede">If you've installed Node.js before, this is five minutes. If you haven't, it's still under thirty. Three steps. Tap any step for the why.</p>
+
+    <div class="expand-controls">
+      <button onclick="expandActs('install', true)">Expand All</button>
+      <button onclick="expandActs('install', false)">Collapse All</button>
+    </div>
+
+    <div class="act expanded" data-group="install" id="install-1">
+      <div class="act-header" onclick="toggleAct('install-1')">
+        <div class="act-num-badge">01</div>
+        <div>
+          <h3 class="act-header-title">Install Node.js (if you don't have it)</h3>
+          <span class="act-header-meta">PREREQUISITE · ~10 MIN</span>
+        </div>
+        <span class="act-time-pill">10 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Install Node.js 20 or higher from nodejs.org</div>
+              <div class="step-why">Claude Code is published to npm and runs on Node. Version 20+ is required for newer language features it depends on. Use the LTS (Long Term Support) build — that's the stable line that gets security patches for years. If you manage multiple Node versions across projects, install nvm instead and use that.</div>
+              <div class="step-cmd"><pre><code>node --version  # Should show v20.x or higher</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="install" id="install-2">
+      <div class="act-header" onclick="toggleAct('install-2')">
+        <div class="act-num-badge">02</div>
+        <div>
+          <h3 class="act-header-title">Install Claude Code globally via npm</h3>
+          <span class="act-header-meta">CORE INSTALL · 2 MIN</span>
+        </div>
+        <span class="act-time-pill">2 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Install the official Anthropic package globally</div>
+              <div class="step-why">Installing globally (the <code>-g</code> flag) puts the <code>claude</code> binary on your PATH so you can run it from any folder. The package itself is small — most of the smarts run on Anthropic's servers, the local CLI is just a thin client that handles file I/O and tool calls.</div>
+              <div class="step-cmd"><pre><code>npm install -g @anthropic-ai/claude-code
+claude --version</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="install" id="install-3">
+      <div class="act-header" onclick="toggleAct('install-3')">
+        <div class="act-num-badge">03</div>
+        <div>
+          <h3 class="act-header-title">Authenticate with your Claude account</h3>
+          <span class="act-header-meta">FIRST RUN · 1 MIN</span>
+        </div>
+        <span class="act-time-pill">1 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Run claude once to trigger the OAuth handshake</div>
+              <div class="step-why">First run opens your default browser to authenticate. Click Allow once and a token gets saved to your home directory — you won't need to do this again unless you revoke it. <code>/exit</code> drops back to your shell.</div>
+              <div class="step-cmd"><pre><code>claude
+# Browser opens, sign in, click Allow
+# Then in the terminal: /exit</code></pre></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">Plan requirement</span>
+      <p>Claude Code requires a Pro, Max, Team, or Enterprise plan. Pro at $20/month is enough for everything covered here. If you're already paying for Claude.ai, you already have access.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">04 · Permission Modes</span>
+    <h2>The "click allow 109 times" <em>problem.</em></h2>
+    <p class="lede">By default, Claude Code asks permission for every file edit and bash command. For a serious build session, you want fewer interruptions — without going completely off-leash.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <span class="compare-tag">Default Mode</span>
+        <h3>Asks every time</h3>
+        <p>Claude prompts you before editing files or running bash commands. Great for first projects. Painful for builds with 50+ steps.</p>
+        <pre style="margin-bottom: 0; font-size: 12px;"><code>claude</code></pre>
+      </div>
+
+      <div class="compare-card dark">
+        <span class="compare-tag">Recommended for serious work</span>
+        <h3>acceptEdits mode</h3>
+        <p>Auto-approves file edits and common bash commands like <code>mkdir</code>, <code>npm</code>, <code>git</code>. Risky commands like <code>sudo</code> still prompt. Best balance of speed and safety.</p>
+        <pre style="margin-bottom: 0; font-size: 12px;"><code>claude --permission-mode acceptEdits</code></pre>
+      </div>
+
+      <div class="compare-card">
+        <span class="compare-tag">Power user</span>
+        <h3>Custom allowlist</h3>
+        <p>Define exactly which tools auto-approve in <code>.claude/settings.json</code>. The professional way. Allowlist what you trust, denylist what you fear.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <span class="callout-label">A word about --dangerously-skip-permissions</span>
+      <p>This flag exists. It auto-approves everything. It's also why people accidentally <code>rm -rf ~/</code>. Don't reach for it unless you're working in a throwaway VM or container. <code>acceptEdits</code> with a denylist gives you 95% of the convenience with 5% of the risk.</p>
+    </div>
+
+    <h3>The settings.json this project uses</h3>
+    <p>Drop this file at <code>.claude/settings.json</code> in your project root. Combined with <code>--permission-mode acceptEdits</code>, you get a build session that runs without nagging but still blocks the dangerous stuff.</p>
+
+    <pre><code>{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(npm:*)", "Bash(npx:*)", "Bash(node:*)",
+      "Bash(git:*)", "Bash(railway:*)",
+      "Bash(mkdir:*)", "Bash(touch:*)", "Bash(mv:*)",
+      "Bash(cp:*)", "Bash(rm:*)",
+      "Bash(playwright:*)", "Bash(npx playwright:*)",
+      "Read", "Write", "Edit", "Glob", "Grep"
+    ],
+    "deny": [
+      "Bash(rm -rf /:*)", "Bash(rm -rf ~:*)",
+      "Bash(sudo:*)",
+      "Bash(curl * | sh:*)", "Bash(curl * | bash:*)"
+    ]
+  }
+}</code></pre>
+
+    <p>The full file is in the kit download.</p>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">05 · Foundation</span>
+    <h2>Set up the <em>three-layer system.</em></h2>
+    <p class="lede">Once. After this, every project starts the same way and you never lose work. <strong>Layers 1-3 are required.</strong> Layer 4 (snapshots) and Layer 5 (Docker) are quality-of-life upgrades you can add later when you actually need them. New to this? Stop after Layer 3.</p>
+
+    <div class="expand-controls">
+      <button onclick="expandActs('foundation', true)">Expand All</button>
+      <button onclick="expandActs('foundation', false)">Collapse All</button>
+    </div>
+
+    <div class="act expanded" data-group="foundation" id="foundation-1">
+      <div class="act-header" onclick="toggleAct('foundation-1')">
+        <div class="act-num-badge">01</div>
+        <div>
+          <h3 class="act-header-title">Local · Claude Code + a clean project folder</h3>
+          <span class="act-header-meta">REQUIRED · ~3 MIN</span>
+        </div>
+        <span class="act-time-pill">3 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Claude Code lives in a single project folder on your machine. Everything happens here — edits, git commands, test runs. Get this right once, every project starts the same way.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Create a fresh project folder under your home directory</div>
+              <div class="step-why">A clean folder per project keeps Claude's context window focused — it doesn't accidentally read files from a sibling project. Use a consistent path like <code>~/projects/</code> so you always know where things live.</div>
+              <div class="step-cmd"><pre><code>mkdir ~/projects/your-project &amp;&amp; cd ~/projects/your-project</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Drop in the .claude/settings.json file with permission allowlist</div>
+              <div class="step-why">This file solves the "click allow 109 times" problem. It tells Claude Code which bash commands are safe to run without prompting (npm, git, mkdir) and which to always confirm (sudo, rm -rf). Without this, every build step interrupts you.</div>
+              <div class="step-cmd"><pre><code>mkdir .claude &amp;&amp; cp ~/Downloads/claude-settings.json .claude/settings.json</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Initialize git immediately — checkpoint before you write code</div>
+              <div class="step-why">Always git init before anything else. Even before npm install. This gives you an empty initial commit you can rewind to if Claude Code's first run goes sideways. The .gitignore prevents secrets and bloat from ever entering version control.</div>
+              <div class="step-cmd"><pre><code>git init
+echo "node_modules
+.env
+.DS_Store
+dist
+.railway" &gt; .gitignore</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Three lines of setup. After this, every project you start opens the same way and Claude knows exactly where the rails are.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="foundation" id="foundation-2">
+      <div class="act-header" onclick="toggleAct('foundation-2')">
+        <div class="act-num-badge">02</div>
+        <div>
+          <h3 class="act-header-title">Remote · GitHub as source of truth</h3>
+          <span class="act-header-meta">REQUIRED · ~3 MIN</span>
+        </div>
+        <span class="act-time-pill">3 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Code lives on GitHub. Two long-lived branches. <strong>main</strong> is what users see. <strong>staging</strong> is where you break things safely.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Create the GitHub repo from the command line (or web UI)</div>
+              <div class="step-why">The <code>gh</code> CLI is faster than clicking through github.com but the web UI works too. Either way, what matters is starting private — public-by-default lets you accidentally leak secrets you forgot were in your commit history.</div>
+              <div class="step-cmd"><pre><code>gh repo create your-project --private --source=. --remote=origin</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Push initial commit to main, then create the staging branch</div>
+              <div class="step-why">The first push establishes main as the default. Creating staging from main means both branches start identical. From here forward, all work happens on staging. Main only receives merges of verified code, never direct pushes.</div>
+              <div class="step-cmd"><pre><code>git add .
+git commit -m "init"
+git push -u origin main
+git checkout -b staging
+git push -u origin staging</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Set staging as your default working branch in your local checkout</div>
+              <div class="step-why">Cleanest mental model: staging is for breaking things. Main is what users see. If you stay on staging by default, you literally cannot push broken code to production by accident. Promotion to main is always a deliberate merge.</div>
+              <div class="step-cmd"><pre><code>git checkout staging  # always start work here</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Two branches, one rule: never push directly to main. Promotion is always a merge from staging.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="foundation" id="foundation-3">
+      <div class="act-header" onclick="toggleAct('foundation-3')">
+        <div class="act-num-badge">03</div>
+        <div>
+          <h3 class="act-header-title">Deploy · Railway with two environments</h3>
+          <span class="act-header-meta">REQUIRED · ~5 MIN</span>
+        </div>
+        <span class="act-time-pill">5 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Railway watches your GitHub repo. Main branch auto-deploys to production. Staging branch auto-deploys to staging. Separate environments, separate databases. Zero manual deploys.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Initialize the Railway project and create a staging environment</div>
+              <div class="step-why">Railway environments are full isolation — separate database, separate env vars, separate URL. This is what makes "verify on staging before promoting to main" actually safe. Your test data doesn't pollute production.</div>
+              <div class="step-cmd"><pre><code>railway init your-project
+railway environment new staging</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Connect each Railway environment to its GitHub branch in the dashboard</div>
+              <div class="step-why">In Railway's UI: production environment → main branch, staging environment → staging branch. Once wired, every git push triggers an automatic build and deploy. You never touch a deploy button again.</div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Set environment variables separately for each environment</div>
+              <div class="step-why">Production secrets and staging secrets must be different. Production hits real APIs and real databases; staging should hit test versions. Never share secrets between environments — staging credentials get exposed more often (test users, screenshots, debug sessions) and you don't want production blast radius.</div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Push staging branch → staging deploys. Merge to main → production deploys. Two environments, two URLs, zero manual deploy steps.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="foundation" id="foundation-4">
+      <div class="act-header" onclick="toggleAct('foundation-4')">
+        <div class="act-num-badge">04</div>
+        <div>
+          <h3 class="act-header-title">Snapshot · the nightly parachute</h3>
+          <span class="act-header-meta">UPGRADE · ~5 MIN</span>
+        </div>
+        <span class="act-time-pill">5 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">A nightly GitHub Action cuts a read-only backup branch from main. If something goes sideways, you have insurance. <strong>Parachute, not merge candidate.</strong></p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Create the workflow file at .github/workflows/nightly-backup.yml</div>
+              <div class="step-why">GitHub Actions runs this on a cron schedule with no infrastructure to maintain. The <code>workflow_dispatch</code> trigger also lets you manually fire it from the GitHub UI when you want a snapshot before a risky change. Cost: zero — public/private repos both get free Action minutes.</div>
+              <div class="step-cmd"><pre><code>name: Nightly Backup Branch
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 03:00 UTC daily
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Create snapshot branch
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          git checkout -b "backup/$DATE"
+          git push origin "backup/$DATE"</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Treat backup branches as read-only — never merge them back</div>
+              <div class="step-why">A backup branch is <strong>insurance</strong>, not a feature branch. If you merge <code>backup/2026-05-06</code> back into main, you'd undo everything done since that date. Wrong move. Right move: checkout the backup, copy out the file you need, switch back to staging, paste it in, commit normally.</div>
+              <div class="step-cmd"><pre><code># Recover one file from a snapshot
+git checkout backup/2026-05-06 -- path/to/lost-file.ts
+git checkout staging</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Add a cleanup job to delete backup branches older than 30 days</div>
+              <div class="step-why">Without cleanup, you accumulate 365 backup branches a year and your repo gets bloated. A separate weekly Action that deletes <code>backup/*</code> branches older than 30 days keeps things tidy. Or use git tags instead of branches if you don't need them browseable in the GitHub UI.</div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Two-line GitHub Action gives you 30 days of recovery insurance. Costs nothing. Saves you the one time you really need it.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="foundation" id="foundation-5">
+      <div class="act-header" onclick="toggleAct('foundation-5')">
+        <div class="act-num-badge">05</div>
+        <div>
+          <h3 class="act-header-title">Docker · local Postgres for offline dev</h3>
+          <span class="act-header-meta">SKIP IF NEW · ADD LATER</span>
+        </div>
+        <span class="act-time-pill">SKIP OK</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <div class="callout">
+            <span class="callout-label">First project? Skip this whole section.</span>
+            <p>You don't need Docker to get a working app deployed. Layers 1-4 are enough. This layer is a quality-of-life upgrade for your second or third project, when you start running into real reasons to want a local database (working offline, not waiting on Railway, keeping test data separate from code). <strong>If you're brand new, scroll past this and come back when something here actually solves a problem you're hitting.</strong></p>
+          </div>
+
+          <p class="act-intro">Docker Desktop runs your local Postgres in a container. Your data lives separately from your code, surviving repo wipes and re-clones. Bonus: you can develop on a plane.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Spin up Postgres in a named container with a persistent volume</div>
+              <div class="step-why">The <code>-v my-data:/var/lib/postgresql/data</code> flag is the trick. That named volume persists across container restarts and even container deletions. You can blow away your project folder, re-clone, and your test data is still there. Your data is safer than your code.</div>
+              <div class="step-cmd"><pre><code>docker run --name my-pg \
+  -e POSTGRES_PASSWORD=dev \
+  -p 5432:5432 \
+  -v my-data:/var/lib/postgresql/data \
+  -d postgres:16</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Wire your local app to the container with a DATABASE_URL in .env</div>
+              <div class="step-why">Your code uses one DATABASE_URL variable. Locally it points to <code>localhost:5432</code> (the Docker container). On Railway it points to Railway's managed Postgres. Same code, different env. The <code>.env</code> file is gitignored so secrets never travel.</div>
+              <div class="step-cmd"><pre><code>echo "DATABASE_URL=postgresql://postgres:dev@localhost:5432/postgres" &gt;&gt; .env</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Stop and restart the container without losing data</div>
+              <div class="step-why">Containers are ephemeral, volumes are not. Stopping and starting the container is fine. Even <code>docker rm</code> only kills the container — the named volume persists. To actually wipe data, you'd have to <code>docker volume rm my-data</code> deliberately. That separation is the safety net.</div>
+              <div class="step-cmd"><pre><code>docker stop my-pg
+docker start my-pg     # data still there
+docker rm my-pg        # container gone, data still there
+docker run ... my-pg   # recreate, attach to volume, back to normal</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Code and data live in different boxes. You can break either one without losing the other.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">06 · The Build Workflow</span>
+    <h2>Same four parts, <em>more depth.</em></h2>
+    <p class="lede">The browser version compresses these steps. The CLI version gives you the full toolchain — local files, real CI, persistent sessions.</p>
+
+    <div class="expand-controls">
+      <button onclick="expandActs('workflow', true)">Expand All</button>
+      <button onclick="expandActs('workflow', false)">Collapse All</button>
+    </div>
+
+    <div class="act expanded" data-group="workflow" id="workflow-1">
+      <div class="act-header" onclick="toggleAct('workflow-1')">
+        <div class="act-num-badge">01</div>
+        <div>
+          <h3 class="act-header-title">Mine the meeting for ideas</h3>
+          <span class="act-header-meta">SAME AS BROWSER · ~10 MIN</span>
+        </div>
+        <span class="act-time-pill">10 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">This step is identical in CLI and browser modes. Run the transcript-extractor prompt anywhere a Claude conversation works.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Run the transcript-extractor prompt in any Claude session</div>
+              <div class="step-why">claude.ai web with a Project, Claude Code CLI, or your own API client all work. The prompt is the asset, not the surface. Output is a structured brief that becomes input for step 2. The prompt itself is in the kit download.</div>
+
+              <div class="copy-collapsible">
+                <div class="copy-collapsible-bar" onclick="toggleCollapsible(this, event)">
+                  <div class="copy-collapsible-meta">
+                    <div class="copy-collapsible-title">📋 The Meeting-Mining Prompt</div>
+                  </div>
+                  <div class="copy-collapsible-actions">
+                    <button class="copy-collapsible-toggle" onclick="toggleCollapsible(this.parentElement.parentElement, event)">
+                      <span class="toggle-arrow">▼</span> View
+                    </button>
+                    <button class="copy-collapsible-copy-btn" onclick="copyText('mining-prompt', this, event)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <div class="copy-collapsible-content">
+                  <pre>You're an analyst pulling product signal out of a messy meeting transcript. Read the transcript carefully and extract only the parts relevant to building a product. Ignore housekeeping, social pleasantries, off-topic tangents, and personal updates unless they reveal a constraint.
+
+Output your findings in exactly this structure — no preamble, no commentary, no closing remarks:
+
+## 📱 The App Idea
+**Working name:** [propose one if not stated]
+**Core problem it solves:** [one sentence]
+**The "it just works" moment:** [the dream user experience in 1-2 sentences]
+
+## 🧱 Feature List Pulled From the Call
+| # | Feature | Who Pitched It | Notes |
+|---|---|---|---|
+
+## 🚨 Hard Constraints (Don't Miss These)
+List every constraint or guardrail the speakers explicitly named. Quote the speaker.
+
+## 🧰 Tech Stack Already Decided in the Call
+Bullet list of any platform, framework, language, hosting, or third-party tool the speakers committed to.
+
+## 👥 Stakeholders / Audience
+- **Primary user:** [name and role]
+- **Secondary users:** [list]
+- **Future users / commercial audience:** [if discussed]
+
+## 💰 Business Model Hints
+Any pricing, billing, monetization, or commercial signals from the call.
+
+## 🎬 Demo / Storytelling Hooks
+Things from the transcript that would make this product memorable to demo.
+
+## ❓ Open Questions
+Things the transcript did NOT answer that the user needs to clarify before building.
+
+## ⏭️ Recommended Next Step
+Either: Ready for `idea-to-prd` — paste this brief into the skill and answer the 5 questions
+Or: Need clarification first — list the 1-3 things to ask the user before scoping
+
+Now extract from this transcript:
+
+[PASTE TRANSCRIPT HERE]</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Save the structured brief somewhere your project folder can see it</div>
+              <div class="step-why">Drop the brief into your project folder as <code>brief.md</code>. Claude Code can read it directly when you start the planning step — no copy-paste between windows. This is one of the small wins of working locally: files travel between steps automatically.</div>
+              <div class="step-cmd"><pre><code>cd ~/projects/your-project
+cat &gt; brief.md
+# paste brief, press Ctrl+D when done</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Same prompt, same output, same value. The CLI advantage doesn't kick in until step 2.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="workflow" id="workflow-2">
+      <div class="act-header" onclick="toggleAct('workflow-2')">
+        <div class="act-num-badge">02</div>
+        <div>
+          <h3 class="act-header-title">Run the planning skill in Claude Code</h3>
+          <span class="act-header-meta">CLI ADVANTAGE · ~5 MIN</span>
+        </div>
+        <span class="act-time-pill">5 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Skills are local Markdown files you can edit, version, and reuse. Once installed at the user level, every project gets them.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Install the idea-to-prd skill at the user level</div>
+              <div class="step-why">User-level skills live in <code>~/.claude/skills/</code> and apply to every project. Project-level skills live in <code>.claude/skills/</code> inside one project. For a planning skill you'll use across many projects, install it at the user level. For project-specific skills (like a brand-voice skill for one client), keep them project-level.</div>
+              <div class="step-cmd"><pre><code>mkdir -p ~/.claude/skills
+unzip ~/Downloads/idea-to-prd-skill.zip -d ~/.claude/skills/</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Start Claude Code with acceptEdits mode and verify the skill loaded</div>
+              <div class="step-why">acceptEdits mode means Claude doesn't pause for permission on every file edit — your settings.json allowlist already defines what's safe. <code>/skill list</code> confirms the skill is visible. If it's not there, the install path is wrong.</div>
+              <div class="step-cmd"><pre><code>claude --permission-mode acceptEdits
+
+# Inside Claude Code:
+/skill list
+# You should see idea-to-prd</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Invoke the skill and feed it your structured brief</div>
+              <div class="step-why">You don't summon a skill explicitly — you describe what you want and Claude routes to the right skill based on its description. Naming the skill in your prompt is a hint, not a command. The interview that follows is the same as the browser version, but you can edit the SKILL.md mid-flow if something needs tweaking.</div>
+              <div class="step-cmd"><pre><code>"Use the idea-to-prd skill. Here's my brief:"
+# Then paste the contents of brief.md, or reference it:
+"Use the idea-to-prd skill. Read brief.md and start the interview."</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Skills are local files you own. Edit them, version them, share them across your team. The browser version uses skills too, but you can't customize them.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="workflow" id="workflow-3">
+      <div class="act-header" onclick="toggleAct('workflow-3')">
+        <div class="act-num-badge">03</div>
+        <div>
+          <h3 class="act-header-title">One-shot the build against your local filesystem</h3>
+          <span class="act-header-meta">CLI ADVANTAGE · ~30 MIN</span>
+        </div>
+        <span class="act-time-pill">30 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Same paste-and-walk-away pattern as the browser, but every file is real on your machine. You can grep, you can git diff, you can rerun any step.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Paste the generated PRD into the same Claude Code session</div>
+              <div class="step-why">Same session means Claude already has context from the planning interview — it remembers what was cut, what was confirmed, what the brand voice rules say. You don't have to re-establish anything. The PRD becomes the build instructions and the planning context becomes the rationale Claude uses when it needs to make tradeoffs.</div>
+              <div class="step-cmd"><pre><code>"Build this PRD end-to-end. [paste full PRD]"</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Watch files appear in your editor as Claude builds</div>
+              <div class="step-why">Open VS Code (or your editor of choice) on the project folder while Claude works. Files appear and update in real time. You can scan code as it's written — not to interrupt, but to catch obvious problems early. The discipline is to watch, not type. Every interruption breaks the build flow.</div>
+              <div class="step-cmd"><pre><code># In another terminal:
+code ~/projects/your-project   # opens VS Code on the folder</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Let Claude run the test suite at the end and confirm it passes</div>
+              <div class="step-why">A good PRD ends with "run the tests and confirm they pass." Claude executes <code>npm test</code> and <code>npx playwright test</code> against the build it just made. If anything fails, Claude diagnoses and fixes — that's the loop. If everything passes, you have a working app verified by the constraints you specified.</div>
+              <div class="step-cmd"><pre><code># Claude does this automatically per the PRD
+npm test
+npx playwright test</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Local build means real files, real tests, real debuggability. You can rewind to any point with git. You can teleport the session to the browser if you want to demo from anywhere.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="act" data-group="workflow" id="workflow-4">
+      <div class="act-header" onclick="toggleAct('workflow-4')">
+        <div class="act-num-badge">04</div>
+        <div>
+          <h3 class="act-header-title">Test, deploy, verify, promote</h3>
+          <span class="act-header-meta">CI/CD PIPELINE · ~10 MIN</span>
+        </div>
+        <span class="act-time-pill">10 MIN</span>
+        <div class="act-toggle">+</div>
+      </div>
+      <div class="act-body">
+        <div class="act-body-inner">
+
+          <p class="act-intro">Push to staging, verify on the staging URL, merge to main. Railway handles the deploy. You handle the verification.</p>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Run tests one more time locally before pushing</div>
+              <div class="step-why">Belt and suspenders. CI will run them again after the push, but failing locally is faster and cheaper than failing in CI. If they pass locally and fail in CI, you've found an environment difference worth investigating.</div>
+              <div class="step-cmd"><pre><code>npm test
+npx playwright test</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Commit and push to the staging branch</div>
+              <div class="step-why">Staging branch push triggers Railway's staging deploy. Your CI Action runs Playwright on the pushed commit. If both pass, you have a working staging URL within 2-3 minutes. Note the commit message — write it for future-you, not for present-you.</div>
+              <div class="step-cmd"><pre><code>git add .
+git commit -m "MVP build: card scan + draft generation"
+git push origin staging</code></pre></div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Open staging URL on a phone and run through the actual user flow</div>
+              <div class="step-why">CI tests verify what they're written to verify. Eyeballs catch what tests miss — broken layout on mobile, weird tap targets, slow images, copy that reads wrong out of context. Test on a real phone, not the desktop browser's mobile preview. Different rendering, different network conditions.</div>
+            </div>
+          </div>
+
+          <div class="step-row" onclick="toggleStep(this)">
+            <div class="step-check"></div>
+            <div class="step-content">
+              <div class="step-what">Promote to main only after staging looks right</div>
+              <div class="step-why">Merging staging into main triggers production deploy. Once that fires, real users see your changes. The merge is the irreversible moment — anything wrong now requires a rollback or a hotfix. So you only merge when staging genuinely looked right, not when "it should be fine."</div>
+              <div class="step-cmd"><pre><code>git checkout main
+git merge staging
+git push origin main</code></pre></div>
+            </div>
+          </div>
+
+          <div class="act-takeaway">
+            Push staging → see it deployed → verify → promote. Same five commands every release. Muscle memory after the third project.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">07 · Tests as Policy</span>
+    <h2>Encode your <em>guardrails as tests.</em></h2>
+    <p class="lede">The most important constraint in a build is the one that's enforced. Tests are how you enforce.</p>
+
+    <p>The 100 Cups Connector PRD includes a "Byron Rule" test that verifies tasks never auto-send. If a future change breaks that constraint, the test fails and CI blocks the deploy. That's how you turn a verbal commitment into permanent infrastructure.</p>
+
+    <pre><code>// tests/e2e/task-gate.spec.ts
+test('approving a task triggers send, not before', async ({ page }) =&gt; {
+  // 1. Create a contact via API
+  // 2. Generate a follow-up task
+  // 3. Verify task is in DB with status='pending'
+  // 4. Verify GHL endpoint NOT called yet
+  expect(mockGhl.callCount).toBe(0);
+
+  // 5. Tap "Approve &amp; Send"
+  await page.click('[data-testid="approve-task"]');
+
+  // 6. Verify GHL endpoint called exactly once
+  expect(mockGhl.callCount).toBe(1);
+  expect(taskStatus).toBe('sent');
+});</code></pre>
+
+    <div class="marginalia">
+      → If you're building any AI tool that takes outbound action — emails, posts, payments — a test like this is non-negotiable. Voluntary policies erode. Tests don't.
+    </div>
+
+    <h3>Run on every commit</h3>
+    <p>Add a GitHub Action that runs Playwright on every push. If tests fail, the deploy blocks.</p>
+
+    <pre><code>name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test</code></pre>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">08 · Tips From the Trenches</span>
+    <h2>Things that <em>actually matter.</em></h2>
+
+    <h3>Use Plan Mode for big changes</h3>
+    <p>Before letting Claude Code make sweeping changes, run <code>claude --permission-mode plan</code>. In plan mode, Claude only reads files and explores — it can't write anything. Once you're satisfied with the plan, switch modes or hand it off.</p>
+
+    <h3>Teleport between web and CLI</h3>
+    <p>Started a session in claude.ai/code? You can pull it into your terminal with <code>/teleport</code>. Useful when an experiment outgrows the browser sandbox.</p>
+
+    <h3>Skills compose</h3>
+    <p>Multiple skills can apply to one task. Drop the <code>idea-to-prd</code> skill alongside <code>frontend-design</code>, <code>repo-pentest</code>, or your own custom skills. Claude reads them all and routes appropriately.</p>
+
+    <h3>MCP servers extend everything</h3>
+    <p>The CLI version supports MCP (Model Context Protocol) servers — connect Claude Code to your existing tools (Slack, Linear, custom internal APIs). The browser version is more sandboxed; this is a CLI-exclusive advantage.</p>
+
+    <h3>Hooks for automation</h3>
+    <p>Claude Code supports hooks that fire on events (before commit, after edit, etc.). Use them for auto-formatting, lint-on-save, or running specific tests when specific files change.</p>
+  </section>
+
+  <section>
+    <span class="section-eyebrow">09 · Common Issues</span>
+    <h2>What goes wrong, <em>and how to fix it.</em></h2>
+
+    <h3>"command not found: claude"</h3>
+    <p>Restart your terminal after install — npm global binaries need a fresh PATH. If still broken, check <code>npm config get prefix</code> and add <code>$(npm config get prefix)/bin</code> to your PATH.</p>
+
+    <h3>Claude Code stops mid-build</h3>
+    <p>Type <code>continue</code> and hit Enter. It picks up where it left off. If you hit a context-window error, ask for a summary and start a fresh session with that summary.</p>
+
+    <h3>Permission errors on macOS</h3>
+    <p>If you see EACCES errors during npm install, don't use <code>sudo</code>. Set up a user-owned npm prefix instead: <code>npm config set prefix ~/.npm-global</code> and add that to your PATH.</p>
+
+    <h3>Railway deploy succeeds but app is broken</h3>
+    <p>90% of the time it's missing environment variables. Run <code>railway variables</code> to check what's set. Compare against your local <code>.env.example</code>.</p>
+
+    <h3>Playwright tests pass locally, fail in CI</h3>
+    <p>Usually a timing issue. Replace <code>page.waitForTimeout</code> with proper <code>page.waitFor*</code> assertions. Or it's a missing system dependency — run <code>npx playwright install --with-deps</code> in your CI workflow.</p>
+
+    <h3>Backup branch is huge</h3>
+    <p>If <code>backup/YYYY-MM-DD</code> branches accumulate over months, they bloat your repo. Add a cleanup workflow that deletes branches older than 30 days. Or use git tags instead of branches if you don't need them browseable.</p>
+  </section>
+
+  <!-- ===== PRE-CALL SETUP · DO THIS BEFORE YOU TRY IT YOURSELF ===== -->
+  <section style="border-top: none; padding-top: 0;">
+    <div class="precall-section">
+      <span class="section-eyebrow" style="color: var(--rust);">10 · Pre-Call Setup · Before You Try This Yourself</span>
+      <h2>Every step that <em>got me ready.</em></h2>
+      <p class="lede">The browser-mode setup takes about 30 minutes the first time. The CLI/dev-mode setup adds another 20-30 for installing Claude Code, configuring permissions, and wiring up your foundation. This is the consolidated checklist for both paths.</p>
+
+      <!-- PHASE 1 · ACCOUNTS -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">01</div>
+          <div>
+            <div class="precall-phase-title">Confirm the three accounts</div>
+            <div class="precall-phase-time">~ 5 min · skip what you have</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">All three are needed for the full flow. Free tiers work for everything except Claude (paid plan required for Projects + Code).</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Claude account</strong> · Pro $20/mo, Max/Team/Enterprise · Required for Projects, Skills, and Claude Code</div>
+            <span class="precall-step-meta">claude.ai → upgrade if on free tier</span>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>GitHub</strong> · free is fine · CLI workflow assumes <code>gh</code> tool installed too</div>
+            <span class="precall-step-meta">github.com → install gh: brew install gh / scoop install gh</span>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Railway</strong> · sign in with GitHub · install <code>railway</code> CLI for local deploy</div>
+            <span class="precall-step-meta">railway.com · brew install railway / npm i -g @railway/cli</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 · LOCAL TOOLCHAIN -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">02</div>
+          <div>
+            <div class="precall-phase-title">Install Claude Code locally</div>
+            <div class="precall-phase-time">~ 5 min · CLI path · skip if browser-only</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">Browser-mode users skip this. CLI-mode users get faster iteration plus skills and settings that stay across projects.</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Install <strong>Node.js 20+</strong> from nodejs.org · pick the LTS build · verify with <code>node --version</code></div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Install Claude Code · <code>npm install -g @anthropic-ai/claude-code</code> · verify with <code>claude --version</code></div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Run <code>claude</code> once · OAuth flow opens browser · authorize · type <code>/exit</code> when done</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Install the planning skill at user level · <code>mkdir -p ~/.claude/skills && unzip idea-to-prd-skill.zip -d ~/.claude/skills/</code></div>
+            <span class="precall-step-meta">User-level skills apply across every project · Project-level skills go in repo's .claude/skills/</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 · GITHUB REPO -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">03</div>
+          <div>
+            <div class="precall-phase-title">Create the GitHub repo</div>
+            <div class="precall-phase-time">~ 3 min · CLI or web UI</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">Either via <code>gh repo create</code> or the web UI. Initialize with a README so the repo isn't empty.</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">CLI · <code>gh repo create my-app --public --add-readme --clone</code> · drops you into the cloned folder</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Web UI · github.com → New → name → "Add a README" → Create · then <code>git clone</code> locally</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">If using staging/main split · create staging branch immediately · <code>git checkout -b staging && git push -u origin staging</code></div>
+            <span class="precall-step-meta">Foundation Layer 02 in this guide · staging is your dev branch, main is production</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 · CLAUDE PROJECT -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">04</div>
+          <div>
+            <div class="precall-phase-title">Set up your Claude Project for planning</div>
+            <div class="precall-phase-time">~ 8 min · same as the audience version</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">Claude Project = persistent knowledge + custom instructions. Different surface than Claude Code (which is the build tool). You'll use both: Project for planning, Code for building.</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">claude.ai → Projects → New Project → name it · <em>not</em> the same as your GitHub repo, this is for planning across projects</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Upload <strong>SKILL.md</strong> (extracted from idea-to-prd-skill.zip) to Project Knowledge · this is the planning interview rules</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Upload <strong>BRAND_VOICE.md</strong> · enforces voice rules on AI-generated copy</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Optional · upload a project-specific CLAUDE.md to provide design tokens, tech stack preferences, hard constraints</div>
+            <span class="precall-step-meta">CLAUDE.md is also recognized natively by Claude Code as project instructions when at repo root</span>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Set Custom Instructions · <em>"For any product brief I share, follow the workflow in SKILL.md and apply BRAND_VOICE.md to all generated copy."</em></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 5 · AUTO-ACCEPT -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">05</div>
+          <div>
+            <div class="precall-phase-title">Auto-accept settings for Claude Code</div>
+            <div class="precall-phase-time">~ 3 min · stops the every-five-seconds prompts</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">Claude Code asks before file edits and bash commands. The <code>defaultMode: acceptEdits</code> setting plus a bash allowlist lets common dev commands run without approval. Dangerous commands (sudo, rm -rf /, etc.) are explicitly denied.</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Inside your repo · <code>mkdir -p .claude</code></div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Drop the kit's <strong>claude-settings.json</strong> into <code>.claude/settings.json</code> · acceptEdits + Bash allowlist for npm/git/railway/etc · deny list for sudo/rm -rf</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text">Verify · launch <code>claude</code> in the repo · should NOT prompt for routine edits anymore · still pauses on out-of-allowlist commands</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>For session-only acceptance</strong> · in the Claude Code TUI hit <code>shift+tab</code> repeatedly to cycle modes · land on acceptEdits · resets when you exit</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 6 · FOUNDATION (FOR REAL PROJECTS) -->
+      <div class="precall-phase">
+        <div class="precall-phase-header">
+          <div class="precall-phase-num">06</div>
+          <div>
+            <div class="precall-phase-title">Foundation layers for real projects</div>
+            <div class="precall-phase-time">~ 15 min · production hygiene · skip for one-shot demos</div>
+          </div>
+        </div>
+        <p class="precall-phase-intro">For real projects, set up these once and every future build inherits them. Detailed in Foundation Acts 01-04 above.</p>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Layer 01 · Project skeleton</strong> · folder, settings.json, git init</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Layer 02 · Branch strategy</strong> · main is production, staging is dev · never push to main directly</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Layer 03 · Two Railway environments</strong> · production (main) and staging (staging) · separate env vars</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Layer 04 · Nightly backup</strong> · GitHub Action snapshots main to backup/YYYY-MM-DD branch every night · read-only insurance</div>
+          </div>
+        </div>
+
+        <div class="precall-step" onclick="togglePrecallStep(this)">
+          <div class="precall-step-check"></div>
+          <div class="precall-step-body">
+            <div class="precall-step-text"><strong>Layer 05 · Docker (optional)</strong> · local Postgres for offline dev · skip if new · add later when offline matters</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="precall-final">
+        <h3>You're set ☕</h3>
+        <p>Foundation in place, both surfaces wired up, auto-accept configured. Now run through the workflow with your own idea. Total flow: idea → PRD → build → deploy in about an hour.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TAKE THESE WITH YOU · COPY BLOCKS ===== -->
+  <section style="border-top: none; padding-top: 0;">
+    <div class="takeaway-section">
+      <span class="section-eyebrow" style="color: var(--gold);">11 · Take These With You</span>
+      <h2>One click. <em>Everything referenced above.</em></h2>
+      <p class="lede">Tap any button. The full content lands in your clipboard. No download, no zip, no friction. Code blocks throughout the page also have copy buttons in the corner.</p>
+
+      <div style="margin: 28px 0 36px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 10px; font-weight: 700;">Share this advanced guide</div>
+        <div class="copy-block single-line">
+          <span class="copy-content">https://claude.ai/public/artifacts/f72c21e7-b029-438e-8440-83ee21cc249a</span>
+          <button class="copy-btn" onclick="copyText('https://claude.ai/public/artifacts/f72c21e7-b029-438e-8440-83ee21cc249a', this, event)" aria-label="Copy URL">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <span class="copy-toast">Copied!</span>
+        </div>
+      </div>
+
+      <div style="display: grid; gap: 14px;">
+
+        <div class="copy-hidden">
+          <div class="copy-hidden-meta">
+            <div class="copy-hidden-title">⚙️ .claude/settings.json</div>
+            <div class="copy-hidden-desc">acceptEdits mode + bash allowlist · Drop into your project root</div>
+          </div>
+          <button class="copy-hidden-btn" onclick="copyText('claude-settings', this, event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Settings
+          </button>
+        </div>
+
+        <div class="copy-hidden">
+          <div class="copy-hidden-meta">
+            <div class="copy-hidden-title">🧱 The 100 Cups Connector PRD</div>
+            <div class="copy-hidden-desc">Full one-shot build prompt · ~3000 words · Paste into Claude Code</div>
+          </div>
+          <button class="copy-hidden-btn" onclick="copyText('build-prd', this, event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy PRD
+          </button>
+        </div>
+
+        <div class="copy-hidden">
+          <div class="copy-hidden-meta">
+            <div class="copy-hidden-title">📋 The Meeting-Mining Prompt</div>
+            <div class="copy-hidden-desc">Turn any transcript into a structured brief</div>
+          </div>
+          <button class="copy-hidden-btn" onclick="copyText('transcript-extractor', this, event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Prompt
+          </button>
+        </div>
+
+        <div class="copy-hidden">
+          <div class="copy-hidden-meta">
+            <div class="copy-hidden-title">🎨 Brand Voice Doc</div>
+            <div class="copy-hidden-desc">Voice rules for AI-generated copy · ~600 words</div>
+          </div>
+          <button class="copy-hidden-btn" onclick="copyText('brand-voice', this, event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Voice Doc
+          </button>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(244, 237, 224, 0.15);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 10px; font-weight: 700;">Bonus · The planning skill (folder)</div>
+        <p style="color: var(--paper-deep); font-size: 14px; margin-bottom: 14px;">Drop into <code style="background: rgba(212, 163, 71, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 3px;">~/.claude/skills/</code> for user-level access across every project.</p>
+        <a href="idea-to-prd-skill.zip" download class="copy-hidden-btn" style="display: inline-flex; text-decoration: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Skill (.zip)
+        </a>
+      </div>
+
+      <div style="margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(244, 237, 224, 0.15); text-align: center;">
+        <a href="https://claude.ai/public/artifacts/48a34448-8693-48ff-b9da-7ef828d4c1c6" target="_blank" rel="noopener" class="cta-btn cta-btn-outline">← Back to main page</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-mark">For the folks who run <em>npm install</em> in their sleep.</div>
+  <div class="footer-meta">100 Cups Mastermind · Advanced Setup · May 2026</div>
+</footer>
+
+<script>
+  // ===== ACT EXPAND/COLLAPSE (group-scoped) =====
+  function toggleAct(id) {
+    const act = document.getElementById(id);
+    if (!act) return;
+    act.classList.toggle('expanded');
+  }
+
+  function expandActs(group, shouldExpand) {
+    document.querySelectorAll('[data-group="' + group + '"]').forEach(a => {
+      if (shouldExpand) a.classList.add('expanded');
+      else a.classList.remove('expanded');
+    });
+  }
+
+  // ===== STEP CHECK =====
+  function toggleStep(row) {
+    row.classList.toggle('done');
+    const check = row.querySelector('.step-check');
+    if (check) check.classList.toggle('done');
+  }
+
+  // ===== COPY TO CLIPBOARD =====
+  const copyVault = {};
+  Object.assign(copyVault, {"transcript-extractor": "# Transcript-to-Build-Brief Prompt\n\n> **Purpose:** Mine any meeting/call transcript for product ideas, features, constraints, and credits — formatted so you can hand it directly to the `idea-to-prd` skill.\n>\n> **Use it standalone OR as Phase 0 of the idea-to-prd flow.**\n\n---\n\n## 🎯 When to Use This\n\n- After any group brainstorm, mastermind, or coaching call\n- When a client describes a product across a 60-minute conversation\n- When you have a Fathom/Otter/Granola transcript and need signal, not summary\n- Before running the `idea-to-prd` skill — gives it richer context than a vocal drop alone\n\n---\n\n## 📋 The Prompt (Copy & Paste)\n\n> You're an analyst pulling product signal out of a messy meeting transcript. Read the transcript carefully and extract only the parts relevant to building a product. Ignore housekeeping, social pleasantries, off-topic tangents, and personal updates unless they reveal a constraint.\n>\n> Output your findings in **exactly this structure** — no preamble, no commentary, no closing remarks:\n>\n> ---\n>\n> ## 📱 The App Idea\n>\n> **Working name:** [propose one if not stated]\n> **Core problem it solves:** [one sentence]\n> **The \"it just works\" moment:** [the dream user experience in 1-2 sentences]\n>\n> ---\n>\n> ## 🧱 Feature List Pulled From the Call\n>\n> | # | Feature | Who Pitched It | Notes |\n> |---|---|---|---|\n> | 1 | [feature name] | [name] | [context] |\n>\n> ---\n>\n> ## 🚨 Hard Constraints (Don't Miss These)\n>\n> List every constraint or guardrail the speakers explicitly named. Quote the speaker. Format:\n>\n> > \"[direct quote]\" — [name]\n>\n> Then explain what it means for the build in 1-2 sentences.\n>\n> ---\n>\n> ## 🧰 Tech Stack Already Decided in the Call\n>\n> Bullet list of any platform, framework, language, hosting, or third-party tool the speakers committed to. Note rejected options too (\"NOT X — speaker said Y because...\").\n>\n> ---\n>\n> ## 👥 Stakeholders / Audience\n>\n> - **Primary user:** [name and role]\n> - **Secondary users:** [list]\n> - **Future users / commercial audience:** [if discussed]\n>\n> ---\n>\n> ## 💰 Business Model Hints\n>\n> Any pricing, billing, monetization, or commercial signals from the call. Quote the speaker if relevant.\n>\n> ---\n>\n> ## 🎬 Demo / Storytelling Hooks\n>\n> Things from the transcript that would make this product memorable to demo:\n> - Who pitched what (so you can credit them publicly)\n> - Constraints that became features\n> - Quotable moments\n>\n> ---\n>\n> ## ❓ Open Questions\n>\n> Things the transcript did NOT answer that the user needs to clarify before building:\n> - [question 1]\n> - [question 2]\n>\n> ---\n>\n> ## ⏭️ Recommended Next Step\n>\n> Either:\n> - **Ready for `idea-to-prd`** — paste this brief into the skill and answer the 5 questions\n> - **Need clarification first** — list the 1-3 things to ask the user before scoping\n>\n> ---\n>\n> Now extract from this transcript:\n>\n> [PASTE TRANSCRIPT HERE]\n\n---\n\n## 🪞 Why This Format Works\n\n| Section | Why It's There |\n|---|---|\n| Feature table with **credit attribution** | When you demo or build, you can publicly credit the people in the room — they'll champion the product |\n| Hard constraints as **direct quotes** | Constraints lose force when paraphrased. Quotes preserve the urgency. |\n| Rejected tech stack options | Saves you from re-litigating decisions during the build |\n| Open questions list | Forces a clarification round BEFORE scoping, not during |\n| \"Recommended next step\" | Routes naturally into the `idea-to-prd` skill or back to the user |\n\n---\n\n## 🧠 Pro Tips for the Demo\n\n1. **Read the prompt aloud** before you paste the transcript. The group should see *what makes the prompt work* — credit attribution, the constraint section, the open questions section.\n\n2. **Show what gets ignored.** Open the raw transcript and point out the personal stuff (Jason's house move, Brian's bookstore stories). Then show the output that filtered all of it out. The contrast is the lesson.\n\n3. **The credit table is the unlock.** When the group sees their own names in the feature table, they realize this is *their* product. That's when they engage.\n\n4. **If a name is misspelled or wrong**, fix it once in the output and explain why: this becomes part of the brand voice / institutional memory you carry forward.\n\n---\n\n## 🔧 Variations\n\n### Variation A: Coaching Call Mining\n\nReplace \"product signal\" with \"coaching insights\" and adjust the output structure to:\n- Client breakthroughs\n- Patterns the coach noticed\n- Action items committed to\n- Analogies used (great for `_ANALOGY_INDEX.md`)\n- Follow-up topics for next session\n\n### Variation B: Sales Discovery Call\n\nReplace with \"sales signal\":\n- Pain points (verbatim quotes)\n- Stated budget signals\n- Decision-maker dynamics\n- Objections raised\n- Next-step commitments\n\n### Variation C: Interview Transcript\n\nFor client interviews, contractor interviews, podcast guests:\n- Key claims and evidence\n- Storytelling beats (anecdotes, specific numbers)\n- Quotable moments for content\n- Topics worth a follow-up\n- Editorial cuts (parts to skip in the final piece)\n\n---\n\n## 📦 Where This Lives\n\nSave this file as `transcript-extractor-prompt.md` in your prompt library. Reference it from any project.\n\nWhen you build the standalone version of the `idea-to-prd` skill, reference this prompt as **Phase 0: Transcript Extraction** — runs only when the input is a meeting transcript instead of a vocal drop.\n", "brand-voice": "# BRAND_VOICE.md — 100 Cups Connector\n\n> All AI-generated copy in this app (emails, social posts, follow-ups) must follow these rules.\n> Pulled from David Shake's pattern, adapted for 100 Cups + Manumation context.\n\n---\n\n## Voice Principles\n\n1. **Human first, AI invisible.** No one should be able to tell a draft was AI-generated.\n2. **Conversational, not corporate.** Write like you're texting a friend who happens to be a peer.\n3. **Specific over vague.** Real details from the meeting, not generic platitudes.\n4. **Confidence without hype.** State the value. Don't sell it twice.\n5. **Short over long.** If a line can be cut, cut it.\n\n---\n\n## Hard Rules (Never Violate)\n\n- ❌ **No em-dashes (—).** Use a period or comma instead.\n- ❌ **No lists of three.** Don't write \"fast, simple, and effective.\" Pick one.\n- ❌ **No \"if this, then that\" constructions.** Write directly.\n- ❌ **No bullet points in body copy.** Bullets are for instructions, not relationship-building.\n- ❌ **No subject lines starting with \"Quick question\" or \"Following up.\"** Be specific.\n- ❌ **No \"I hope this finds you well.\"** Skip the throat-clearing.\n- ❌ **No \"synergy,\" \"leverage,\" \"circle back,\" \"touch base.\"** Corporate jargon.\n- ❌ **No \"Just wanted to...\"** Drop \"just.\"\n- ❌ **No exclamation points unless something genuinely warrants one.** One per email max.\n- ❌ **No closing with \"Best,\"** — use \"Talk soon,\" or sign-off matching the relationship.\n\n---\n\n## Tone Calibration by Channel\n\n| Channel | Length | Tone |\n|---|---|---|\n| **Follow-up email after a meeting** | 3-5 sentences | Warm, specific to what was discussed, one clear CTA |\n| **30-day check-in** | 2-3 sentences | Light, no agenda, reference the original meeting topic |\n| **100 Cups social post** | 50-80 words | Generous about the other person, not self-promotional |\n| **Internal task description** | 1-2 sentences | Plain, action-oriented, no personality needed |\n\n---\n\n## What \"Good\" Looks Like\n\n### ✅ Good follow-up email\n\n> Hey Brian,\n>\n> Loved hearing about the LA Times bestseller last month. Congrats again. I keep thinking about what you said about market research from the bookstore — that's the kind of feedback loop most authors never get.\n>\n> Coffee in Nashville next time you're free?\n>\n> Talk soon,\n> Jason\n\n### ❌ Bad follow-up email (AI tells)\n\n> Hi Brian,\n>\n> I hope this finds you well! It was great to connect with you on our recent call. I wanted to follow up and say how impressed I was by your insights on ghostwriting, your bestseller success, and your unique market research from the bookstore. Your work is truly inspiring — I'd love to leverage our connection going forward.\n>\n> Looking forward to circling back soon!\n>\n> Best,\n> Jason\n\n**What's wrong:** \"I hope this finds you well,\" list of three, em-dash, \"leverage,\" \"circling back,\" \"Best,\" exclamation points, generic praise instead of one specific detail.\n\n---\n\n## Voice Markers (Jason-Specific)\n\nThese come up naturally in Jason's actual writing — preserve them when generating drafts:\n\n- Comfortable with \"Hey [Name]\" openings\n- Uses \"man\" as a sentence opener occasionally (\"Man, that was a great chat...\")\n- Asks one direct question per email, not three\n- Often references the *next* concrete action (\"coffee,\" \"call,\" \"intro\")\n- Signs off with relationship-appropriate closer, not template\n\n---\n\n## Override Mechanism\n\nIf the user explicitly requests a tone shift in a specific draft (e.g., \"make this more formal — it's for a banker\"), the model can override the casual defaults for that one piece of copy. **Default state is the voice above.**\n", "build-prd": "# 100 Cups Connector — Claude Code Build Prompt (v2)\n\n> **Paste this entire block into Claude Code in a fresh project folder.**\n> Built from the May 6 mastermind call. Phyllis gets credit for the original idea.\n>\n> **Before you paste:** copy `claude-settings.json` into `.claude/settings.json` first. That sets up acceptEdits mode + allowlist so Claude doesn't ask for permission on every step.\n\n---\n\n## 🎯 Project Context\n\n**100 Cups Connector** is a mobile-first networking companion for the 100 Cups community. After meeting someone, the user snaps their business card, talks a quick voice note, and the app prepares a complete follow-up package — synced to GoHighLevel, with a draft 100 Cups social post — all gated behind one-tap human approval. Nothing auto-sends.\n\n**Primary user:** Jason Elkins (100 Cups host) and the mastermind group.\n**Audience expansion:** All 100 Cups participants → eventual paid multi-tenant tool.\n\n---\n\n## 🎨 UI/UX Design Direction (READ FIRST)\n\n**Aesthetic commitment:** Editorial coffee-shop magazine meets terminal precision. Warm cream paper, deep ink, gold accents, refined typography. Not generic SaaS. Not purple gradients.\n\n**Reference skill:** Read `/mnt/skills/public/frontend-design/SKILL.md` before any UI work. The skill exists specifically to prevent generic AI aesthetics.\n\n**Mandatory design tokens:**\n\n```css\n:root {\n  --ink: #1a1410;          /* Body text, primary buttons */\n  --paper: #f4ede0;         /* Background */\n  --paper-deep: #ebe1d0;    /* Cards, secondary surfaces */\n  --coffee: #6b3410;        /* Secondary text */\n  --coffee-deep: #3d1d09;   /* Accents, hover states */\n  --crema: #c89d63;         /* Soft highlights */\n  --gold: #d4a347;          /* Active states, CTA accents */\n  --rust: #b54d2c;          /* Warnings, attention pulls */\n  --sage: #5e7553;          /* Success states */\n}\n```\n\n**Typography (Google Fonts, must import):**\n- **Display:** `Fraunces` (700-900) — for headings, hero numbers\n- **Body:** `Inter` (400-700) — for paragraphs, UI text\n- **Mono:** `JetBrains Mono` (400-700) — for labels, timestamps, data\n\n**Mobile-first rules (non-negotiable):**\n- Tap targets ≥ 44px minimum\n- One-handed reachability — primary actions in bottom 60% of screen\n- Safe area insets respected (iOS notch, Android nav bar)\n- No hover-only interactions — every hover state has a tap equivalent\n- Camera button: huge, fixed bottom-center on home screen\n\n**Voice & tone in UI copy:**\n- Same brand voice rules as `BRAND_VOICE.md`\n- No em-dashes\n- Empty states have personality (\"No contacts yet. Go meet someone.\")\n- Loading states say what's happening (\"Reading your card...\" not \"Loading...\")\n- Error states are actionable, not apologetic\n\n---\n\n## 🧱 Tech Stack (LOCKED — exact versions, do not substitute)\n\n```json\n{\n  \"node\": \">=20.11.0\",\n  \"react\": \"^19.0.0\",\n  \"vite\": \"^6.0.0\",\n  \"typescript\": \"^5.7.0\",\n  \"tailwindcss\": \"^4.0.0\",\n  \"drizzle-orm\": \"^0.40.0\",\n  \"drizzle-kit\": \"^0.30.0\",\n  \"postgres\": \"^3.4.5\",\n  \"@clerk/clerk-react\": \"^5.20.0\",\n  \"@anthropic-ai/sdk\": \"^0.40.0\",\n  \"openai\": \"^4.80.0\",\n  \"express\": \"^4.21.0\",\n  \"@playwright/test\": \"^1.50.0\",\n  \"vitest\": \"^3.0.0\",\n  \"lucide-react\": \"^0.469.0\"\n}\n```\n\n**Stack summary:**\n\n| Layer | Choice |\n|---|---|\n| Frontend | React 19 + Vite 6 + TypeScript |\n| Styling | Tailwind CSS 4 + custom design tokens |\n| Backend | Express (Node 20+) |\n| Database | PostgreSQL via Drizzle ORM |\n| Hosting | Railway (single project, monorepo) |\n| Auth | Clerk (single-user mode for MVP) |\n| OCR | OpenAI Vision (`gpt-4o-mini`) |\n| Transcription | OpenAI Whisper |\n| AI generation | Anthropic Claude (`claude-sonnet-4-7`) |\n| GHL sync | GoHighLevel API v2 |\n| Testing | Playwright (E2E) + Vitest (unit) |\n| Icons | lucide-react |\n\n**Required env vars (write a `.env.example` first thing):**\n\n```bash\n# Database\nDATABASE_URL=\n\n# Auth\nVITE_CLERK_PUBLISHABLE_KEY=\nCLERK_SECRET_KEY=\n\n# AI\nOPENAI_API_KEY=\nANTHROPIC_API_KEY=\n\n# GHL\nGHL_API_KEY=\nGHL_LOCATION_ID=\n\n# App config\nVITE_APP_URL=\nPORT=3000\n```\n\n---\n\n## 📁 Scaffolding Pattern (build this exact structure)\n\n```\n100cups-connector/\n├── .claude/\n│   └── settings.json          # acceptEdits mode + allowlist\n├── .env.example\n├── .gitignore\n├── package.json\n├── tsconfig.json\n├── vite.config.ts\n├── tailwind.config.ts\n├── drizzle.config.ts\n├── playwright.config.ts\n├── README.md\n├── PHASE_2_NOTES.md            # Living parking lot — append during build\n├── BRAND_VOICE.md              # Voice rules for AI-generated copy\n├── client/\n│   ├── index.html\n│   ├── main.tsx\n│   ├── App.tsx\n│   ├── routes/\n│   │   ├── Home.tsx\n│   │   ├── ContactDetail.tsx\n│   │   ├── PendingTasks.tsx\n│   │   └── Settings.tsx\n│   ├── components/\n│   │   ├── ui/                 # shadcn-style base components\n│   │   ├── CardScanner.tsx\n│   │   ├── VoiceNoteRecorder.tsx\n│   │   ├── ContactCard.tsx\n│   │   ├── TaskRow.tsx\n│   │   └── PostDraftEditor.tsx\n│   ├── lib/\n│   │   ├── api.ts              # Fetch wrapper with auth\n│   │   ├── camera.ts           # Camera permission + capture\n│   │   ├── audio.ts            # Mic permission + recording\n│   │   └── design-tokens.css   # CSS variables from above\n│   └── styles/\n│       └── globals.css\n├── server/\n│   ├── index.ts                # Express entry\n│   ├── routes/\n│   │   ├── contacts.ts\n│   │   ├── notes.ts\n│   │   ├── tasks.ts\n│   │   └── ghl.ts\n│   ├── lib/\n│   │   ├── db.ts               # Drizzle connection\n│   │   ├── openai.ts           # Vision + Whisper wrappers\n│   │   ├── anthropic.ts        # Claude wrapper with brand voice\n│   │   └── ghl-client.ts       # GoHighLevel API client\n│   ├── jobs/\n│   │   └── follow-up-cron.ts   # 30-day reminder surfacing\n│   └── middleware/\n│       └── auth.ts             # Clerk session verification\n├── shared/\n│   └── schema.ts               # Drizzle schema (single source of truth)\n└── tests/\n    ├── e2e/\n    │   ├── card-scan.spec.ts\n    │   ├── voice-note.spec.ts\n    │   ├── task-gate.spec.ts\n    │   └── ghl-sync.spec.ts\n    └── unit/\n        ├── brand-voice.test.ts\n        └── ghl-client.test.ts\n```\n\n---\n\n## ✅ MVP Feature List — BUILD THESE, NOTHING ELSE\n\n### 1. Card Scan → Profile\n\n- Mobile camera capture (or file upload fallback for desktop)\n- POST image to `/api/contacts/scan-card`\n- Server sends to OpenAI Vision with prompt: *\"Extract name, title, company, email, phone, website, LinkedIn URL from this business card. Return strict JSON. If a field is missing, return null.\"*\n- Show extracted fields in a confirmation form\n- **User must tap \"Looks good\" before save** — never auto-save scan results\n- Save to `contacts` table on confirm\n\n### 2. Voice Note \"Doctor Notes\"\n\n- One-tap record button on contact detail screen\n- Hold-to-record OR tap-toggle (default: tap to start, tap to stop)\n- Visual waveform during recording\n- POST audio blob to `/api/notes/transcribe`\n- Server: Whisper transcription → Claude summary + tags + key takeaways\n- Append to `notes` table linked to contact\n\n### 3. Photo of the Person\n\n- Front camera capture button on contact detail\n- Store in Railway volume (`/uploads/` mount) for MVP\n- Display on contact card with rounded corners, ink border\n\n### 4. GHL One-Way Sync\n\n- On contact save → POST to GHL `/contacts` endpoint\n- Tags applied locally also push to GHL custom field `cups_tags`\n- Store the GHL contact ID locally (`contacts.ghl_id`)\n- **Pull-from-GHL is Phase 2** — local is source of truth for MVP\n\n### 5. 🚨 Task-Gate System (THE BYRON RULE — DO NOT SKIP)\n\n**This is the differentiating feature. The whole product hinges on this.**\n\n- All \"follow-up actions\" create a row in `tasks` table — **never auto-send anything**\n- Schema:\n  ```ts\n  tasks: {\n    id, contact_id, type ('email' | 'sms' | 'social_post' | 'reminder'),\n    draft_content (text), draft_subject (text, nullable),\n    status ('pending' | 'approved' | 'sent' | 'dismissed'),\n    scheduled_for (timestamp, nullable),\n    created_at, sent_at (nullable)\n  }\n  ```\n- \"Pending Tasks\" route shows all `status='pending'` items\n- Each task has three actions: **Approve & Send**, **Edit Draft**, **Dismiss**\n- Only \"Approve & Send\" triggers the actual outbound call (POST to GHL workflow trigger)\n- After send: `status='sent'`, set `sent_at`\n\n### 6. 100 Cups Post Draft Generator\n\n- Button on contact detail: \"Generate 100 Cups Post\"\n- Server collects: contact info + most recent voice note summary + photo URL + `BRAND_VOICE.md` rules\n- Calls Claude with structured prompt enforcing voice rules\n- Creates `tasks` row of type `social_post` with the draft\n- User reviews, edits, approves → copies to clipboard (manual post for MVP)\n\n### 7. 30-Day Follow-Up Reminder\n\n- On contact creation: auto-create `tasks` row, type `email`, `scheduled_for=NOW()+30d`\n- Draft email uses brand voice + meeting context from notes\n- Cron job (`jobs/follow-up-cron.ts`) runs daily at 8am ET\n- Surfaces tasks with `scheduled_for` within next 3 days to Pending Tasks screen\n\n---\n\n## 🧪 Playwright E2E Tests (REQUIRED — write alongside features)\n\n**Why E2E first:** This is a mobile-first app with camera/mic permissions. Smoke tests prevent the \"works on my laptop\" trap. Run on every commit.\n\n**Test files to create:**\n\n### `tests/e2e/card-scan.spec.ts`\n```ts\ntest('user can scan a card and save a contact', async ({ page }) => {\n  // 1. Navigate to home, sign in via Clerk test user\n  // 2. Tap \"Scan Card\"\n  // 3. Upload fixture image (tests/fixtures/sample-card.jpg)\n  // 4. Wait for OCR result\n  // 5. Verify name field populated\n  // 6. Tap \"Looks good\"\n  // 7. Verify redirect to contact detail\n  // 8. Verify contact appears in DB (via test API endpoint)\n});\n\ntest('user must confirm before save', async ({ page }) => {\n  // Verify NO contact is saved if user backs out before confirming\n});\n```\n\n### `tests/e2e/task-gate.spec.ts`\n```ts\ntest('approving a task triggers send, not before', async ({ page }) => {\n  // Critical Byron Rule test\n  // 1. Create a contact via API\n  // 2. Generate a follow-up task\n  // 3. Verify task is in DB with status='pending'\n  // 4. Verify GHL endpoint NOT called (mock should have 0 hits)\n  // 5. Tap \"Approve & Send\"\n  // 6. Verify GHL endpoint called exactly 1 time\n  // 7. Verify task status='sent'\n});\n\ntest('dismissing a task does not send', async ({ page }) => {\n  // Verify dismiss does not trigger any outbound call\n});\n```\n\n### `tests/e2e/voice-note.spec.ts`\n```ts\ntest('voice note creates note with summary and tags', async ({ page }) => {\n  // 1. Navigate to existing contact\n  // 2. Mock mic permission grant\n  // 3. Tap record, wait, tap stop\n  // 4. Verify upload + transcription completed\n  // 5. Verify note row exists with summary and tags\n});\n```\n\n### `tests/e2e/ghl-sync.spec.ts`\n```ts\ntest('contact creation syncs to GHL', async ({ page }) => {\n  // Use mocked GHL endpoint\n  // Verify POST /contacts called with correct payload\n  // Verify ghl_id stored locally\n});\n```\n\n### `tests/e2e/brand-voice.spec.ts`\n```ts\ntest('generated post follows brand voice rules', async ({ page }) => {\n  // Generate a post, scan output for violations\n  expect(post).not.toMatch(/—/); // no em-dashes\n  expect(post).not.toMatch(/\\b(\\w+),\\s(\\w+),\\sand\\s(\\w+)\\b/); // no lists of three\n  expect(post).not.toMatch(/synergy|leverage|circle back|touch base/i);\n});\n```\n\n**Playwright config:**\n```ts\n// playwright.config.ts\nimport { defineConfig, devices } from '@playwright/test';\nexport default defineConfig({\n  testDir: './tests/e2e',\n  fullyParallel: false,  // sequential — these mutate DB\n  workers: 1,\n  reporter: 'html',\n  use: {\n    baseURL: process.env.VITE_APP_URL || 'http://localhost:3000',\n    trace: 'on-first-retry',\n  },\n  projects: [\n    { name: 'iPhone 15', use: { ...devices['iPhone 15'] } },\n    { name: 'Pixel 8', use: { ...devices['Pixel 8'] } },\n  ],\n});\n```\n\n---\n\n## 🛡️ Hard Constraints (Non-Negotiable)\n\n1. **NOTHING auto-sends.** The Byron Rule. Every outbound action requires explicit user approval.\n2. **Brand voice enforced** on every generated copy. Use rules from `BRAND_VOICE.md`. Add a unit test that scans output for violations.\n3. **Mobile-first.** Tap targets ≥ 44px. No hover-only. Test on actual phone before claiming done.\n4. **Permission flows explain why** before requesting camera/mic.\n5. **Offline-tolerant capture.** If GHL sync fails, queue locally and retry. Never lose a contact.\n6. **All AI prompts use structured output (JSON mode).** No free-text parsing.\n7. **All AI calls have timeouts** (15s default) and fall back gracefully.\n8. **Frontend bundle ≤ 500KB gzipped.** Run `npm run build && du -h dist/` and verify.\n\n---\n\n## 📐 Best Practices Checklist (verify before claiming done)\n\n### Code Quality\n- [ ] TypeScript strict mode on (`\"strict\": true` in tsconfig)\n- [ ] No `any` types except where third-party APIs force them (with comment)\n- [ ] All Express routes have try/catch + structured error responses\n- [ ] All AI calls wrapped with retry logic (3 attempts, exponential backoff)\n- [ ] All database queries parameterized (Drizzle handles this)\n\n### Security\n- [ ] No secrets in code or git history\n- [ ] CSP headers set on Express\n- [ ] Rate limiting on all `/api/*` endpoints (express-rate-limit)\n- [ ] Clerk session verified on every authenticated route\n- [ ] CORS locked to `VITE_APP_URL` only\n\n### Performance\n- [ ] Lazy-load route components\n- [ ] Image optimization on uploads (sharp, resize to max 1200px)\n- [ ] Database indexes on `contacts.user_id`, `tasks.status`, `tasks.scheduled_for`\n- [ ] Tailwind 4 JIT mode active (default in v4)\n\n### UX\n- [ ] Every async action has a loading state with text, not just a spinner\n- [ ] Every error state has a retry button\n- [ ] Empty states have personality (see UI copy rules)\n- [ ] Forms preserve input on error\n- [ ] Camera/mic permission flows show \"why\" before the OS prompt\n\n### Testing\n- [ ] Playwright tests pass on iPhone 15 + Pixel 8 viewports\n- [ ] Vitest unit tests for: brand voice scanner, GHL client, prompt builders\n- [ ] Test fixtures committed (`tests/fixtures/sample-card.jpg`, etc.)\n- [ ] Critical paths have at least one test (Byron Rule test is mandatory)\n\n---\n\n## 🚫 NOT in MVP — DO NOT BUILD\n\n### Phase 2 (next sprint)\n\n- LinkedIn profile cross-check (Michael's idea)\n- Multi-tenant / white-label\n- Pull-from-GHL bidirectional sync\n- Scheduled social media posting via GHL workflows\n- \"Did I listen 70%?\" self-check screen\n- Brand voice document upload UI (hardcoded for MVP)\n- In-app GHL workflow builder\n- Auto-tagging → workflow chains (manual trigger only for MVP)\n\n### Phase 3 (commercial product)\n\n- Multi-tenancy with org-level RLS isolation\n- White-label theming\n- Stripe billing\n- Team collaboration\n- Analytics dashboard\n- Process Street integration (Phyllis's separate need)\n- Native iOS/Android apps (PWA only for MVP)\n\n**If tempted to add anything from this list during the build → append to `PHASE_2_NOTES.md` instead.**\n\n---\n\n## 🚀 Build Order (Strict Sequence)\n\nFollow this order. Don't skip ahead. Each step ends with a working, testable state.\n\n| Step | Goal | Verify |\n|---|---|---|\n| 1 | **Project scaffolding** — create folder structure, package.json, tsconfig, vite, tailwind 4, playwright config | `npm run dev` shows blank styled page |\n| 2 | **Design tokens loaded** — globals.css with CSS variables from spec | Hardcoded test page shows correct colors + Fraunces/Inter fonts |\n| 3 | **DB schema + migrations** — Drizzle schema for contacts, notes, tasks; run `drizzle-kit push` | Tables exist in Postgres |\n| 4 | **Express server boots** — basic /api/health endpoint | `curl localhost:3000/api/health` returns 200 |\n| 5 | **Clerk auth wired** — sign in flow works, session verified server-side | Can hit a protected endpoint with auth header |\n| 6 | **Card scan flow** — capture → vision API → confirmation form → save | E2E test passes |\n| 7 | **Voice note flow** — record → Whisper → Claude → save | E2E test passes |\n| 8 | **Photo capture** — front cam → blob storage → display | Manual test on phone |\n| 9 | **GHL sync** — local save triggers GHL contact creation (with mock for tests) | E2E test passes |\n| 10 | **Task system** — schema + Pending Tasks screen + Approve/Edit/Dismiss | Byron Rule E2E test passes |\n| 11 | **Post draft generator** — button → Claude with brand voice → task row | Brand voice E2E test passes |\n| 12 | **30-day cron** — node-cron job surfaces upcoming tasks | Manual test by setting scheduled_for to past |\n| 13 | **Polish pass** — empty states, loading states, error toasts, onboarding | Walk through app on real phone |\n| 14 | **Deploy to Railway** — provision DB, set env vars, deploy | URL works on real phone |\n| 15 | **Smoke test on production** — run E2E suite against deployed URL | All pass |\n\n---\n\n## 🚀 Deploy Steps\n\n```bash\n# Provision Railway\nrailway init 100cups-connector\nrailway add postgresql\n\n# Get DATABASE_URL\nrailway variables\n\n# Set all other env vars (copy from .env)\nrailway variables set VITE_CLERK_PUBLISHABLE_KEY=...\nrailway variables set CLERK_SECRET_KEY=...\nrailway variables set OPENAI_API_KEY=...\nrailway variables set ANTHROPIC_API_KEY=...\nrailway variables set GHL_API_KEY=...\nrailway variables set GHL_LOCATION_ID=...\n\n# Push schema\nnpm run db:push\n\n# Deploy\nrailway up\n\n# Get deployed URL\nrailway domain\n```\n\n---\n\n## 🎬 Final Instructions to Claude Code\n\n1. **Read `/mnt/skills/public/frontend-design/SKILL.md` BEFORE writing any UI.**\n2. **Build in the strict order above.** Do not skip ahead.\n3. **After each major step, run any tests that exist for it.** If tests fail, fix before moving on.\n4. **If tempted to add a feature not on the MVP list — STOP.** Append to `PHASE_2_NOTES.md`.\n5. **If anything in the MVP list seems too hard for one-shot, ASK before scope-cutting.** Don't silently drop features.\n6. **Use `acceptEdits` mode** (already set in `.claude/settings.json`). You should not need to ask permission for routine file edits or common bash commands.\n7. **At the end, output:**\n   - The deployed Railway URL\n   - A 5-line \"what's working / what to test on phone\" summary\n   - Any items appended to `PHASE_2_NOTES.md`\n   - Pass/fail status of each E2E test\n\n**The build is \"done\" only when all E2E tests pass on the deployed URL, not just locally.**\n", "phase2-notes": "# PHASE_2_NOTES.md — 100 Cups Connector\n\n> Everything that came up on the May 6 mastermind call but was cut from MVP scope.\n> Each item has the source (who pitched it) and the reason it was deferred.\n\n---\n\n## Phase 2 (Next Sprint, Post-Demo)\n\n### 1. LinkedIn Profile Cross-Check\n- **Source:** Michael Faas\n- **What:** When a card is scanned, automatically search LinkedIn for matching profiles and surface possibilities. Cross-check scraped data against card data to flag inconsistencies.\n- **Why deferred:** Requires LinkedIn API access (Unipile, RapidAPI, or scraping) which adds a third-party dependency and rate-limit risk to MVP.\n- **Estimated complexity:** Medium. 2-3 days. Good candidate for InboxArmor's existing Unipile integration.\n\n### 2. Pull-from-GHL Bidirectional Sync\n- **Source:** Implied by Jeremy's GHL architecture\n- **What:** When a contact is updated in GHL, push the change back to the local app. Currently sync is one-way (local → GHL).\n- **Why deferred:** Requires webhook infrastructure and conflict resolution logic. MVP only needs the local-as-source-of-truth flow.\n- **Estimated complexity:** Medium. Webhook handler + conflict resolution.\n\n### 3. Scheduled Social Media Posting\n- **Source:** Jason / Jeremy\n- **What:** After approving a 100 Cups post, schedule it directly to LinkedIn / Facebook via GHL workflow trigger.\n- **Why deferred:** MVP uses copy-to-clipboard + manual post. Adding scheduled posting requires GHL workflow plumbing per channel.\n- **Estimated complexity:** Low. GHL already supports this — it's mostly UI + workflow setup.\n\n### 4. \"Did I Listen 70%?\" Self-Check Screen\n- **Source:** Jason (100 Cups quality metric)\n- **What:** Post-meeting prompt that asks the user to self-rate listening quality with reflection questions tied to the 100 Cups framework.\n- **Why deferred:** Pure UX feature, not blocking the core value loop.\n- **Estimated complexity:** Low. Just a form + score storage.\n\n### 5. Brand Voice Document Upload UI\n- **Source:** David Shake's recommendation\n- **What:** Let users upload their own `BRAND_VOICE.md` instead of using the hardcoded one.\n- **Why deferred:** MVP hardcodes Jason's voice. Multi-user voice docs come with multi-tenancy.\n- **Estimated complexity:** Low. File upload + text storage + reference in prompts.\n\n### 6. In-App GHL Workflow Trigger Builder\n- **Source:** Jeremy\n- **What:** Let the user define which GHL workflow fires for which task type, from inside the app.\n- **Why deferred:** GHL UI handles this fine for MVP. Building it twice is wasted work.\n- **Estimated complexity:** Medium-high. Requires GHL workflow API understanding.\n\n### 7. Auto-Tagging → GHL Workflow Chain\n- **Source:** Jeremy\n- **What:** Tags applied during voice note processing automatically trigger downstream GHL workflows (e.g., tag \"great connection\" → fires email + calendar invite workflow).\n- **Why deferred:** MVP requires user to manually trigger workflows from the Pending Tasks screen. Auto-trigger removes the human gate Byron warned against.\n- **Estimated complexity:** Low to implement, **high to do safely**. Requires careful UX so the user isn't surprised by auto-fires.\n\n---\n\n## Phase 3 (Commercial / Paid Product)\n\n### 8. Multi-Tenancy + Org-Level Isolation\n- **Source:** Jeremy (architecture preview)\n- **What:** Each org has isolated contacts, tasks, settings. Row-level security on PostgreSQL.\n- **Why deferred:** MVP is single-user (Jason). Pattern can borrow from ISOHUB's RLS architecture.\n\n### 9. White-Label Theming\n- **Source:** Jeremy\n- **What:** Logo, colors, custom domain per org. Pattern from JACC.\n- **Why deferred:** Premature for one-user MVP.\n\n### 10. Stripe Billing\n- **Source:** Jason (\"we're going to have to pay some amount a month\")\n- **What:** Subscription billing for paid tiers.\n- **Why deferred:** No paid users yet. Add when product-market fit signals appear.\n\n### 11. Team Collaboration\n- **Source:** Implied by mastermind group adoption\n- **What:** Multiple users on one org sharing contacts and assigning tasks.\n- **Why deferred:** Adds permission model complexity unnecessary for solo MVP.\n\n### 12. Analytics Dashboard\n- **Source:** Group discussion\n- **What:** Meetings per week, follow-up conversion rates, top-tagged connections.\n- **Why deferred:** Need data first. Build dashboard after 30+ days of real usage.\n\n### 13. Process Street Integration\n- **Source:** Phyllis / Byron\n- **What:** Long-running processes (podcast production, fulfillment) handled in Process Street, with HighLevel as the trigger and Pipedream as the glue.\n- **Why deferred:** This is **a separate product line**, not part of 100 Cups Connector. Tracked here so we don't lose it. Phyllis has agreed to a live build session for this.\n\n### 14. Native iOS / Android Apps\n- **Source:** Implied\n- **What:** PWA → React Native conversion.\n- **Why deferred:** PWA covers MVP needs. Native is months of work.\n\n### 15. Bonnaroo Easter Egg 🎵\n- **Source:** Jason's house move to Coffee County, Manchester TN\n- **What:** Self-explanatory.\n- **Why deferred:** This is a joke that became a feature. Stays as Phase 3.\n\n---\n\n## Items Captured but Not Building (Out of Scope)\n\n### Byron's Process Street Podcast Workflow\n- Byron offered to share his existing Process Street setup. **Action: get this from Byron, but do not build it into Connector.** It's its own thing.\n\n### Jason's House Sale Investor List\n- Jason is calling investors about buying his current house. Not an app feature. Captured here so it doesn't get confused with product scope.\n\n### Jeremy's $500 Claude Bills\n- Jason raised the cost question. This is a **business model conversation**, not an app feature. Resolves with Phase 3 pricing.\n\n---\n\n## How To Use This File\n\nWhen working on Phase 2:\n1. Pick **one item**, not three.\n2. Re-run `idea-to-prd` skill on that single item to generate a focused PRD.\n3. Move it into a new build folder so the MVP repo stays clean.\n4. Delete it from this file when shipped.\n\nWhen new ideas come up during the build:\n- Add them here immediately. Don't try to remember.\n- Tag the source person (so they get credit).\n- One-line description is enough — full scoping happens later.\n", "setup-guide": "# 🚀 Setup Guide — Vibe Coder's Starter Kit\n\n> **For the mastermind group.** You watched the demo. Now you're going to do it yourself.\n> This guide takes about **30-45 minutes** the first time. After that, every project is 5 minutes to start.\n\n---\n\n## ✅ What You'll Have at the End\n\n- ✅ Claude Code installed and working on your machine\n- ✅ A Claude Project set up, ready for ideation\n- ✅ The `idea-to-prd` skill installed\n- ✅ A working Railway account ready to deploy your first app\n- ✅ One practice PRD generated from your own idea\n\n---\n\n## 📋 What You Need Before Starting\n\n| Thing | Where to get it |\n|---|---|\n| A computer (Mac or Windows) | You already have one |\n| A Claude account | claude.ai |\n| A GitHub account (free) | github.com |\n| A Railway account (free tier works to start) | railway.com |\n| Your business idea (rough is fine) | Your brain |\n\n**Cost note:** Claude Pro is $20/month. Railway has $5 free credit. You won't hit limits practicing.\n\n---\n\n## Part 1: Claude Code Installation (15 min)\n\n### Step 1.1: Install Node.js\n\n**Why:** Claude Code runs on Node. Don't worry about what Node is.\n\n1. Go to **nodejs.org**\n2. Click the big green **LTS** download button (Long Term Support — the safe one)\n3. Run the installer. Click Next on everything. Don't change anything.\n\n**What you'll see:** A progress bar. Then it's done.\n\n**Verify it worked.** Open Terminal (Mac) or Command Prompt (Windows) and type:\n```\nnode --version\n```\n\nYou should see something like `v20.11.0`. If you see a version number, you're good. If you see \"command not found,\" restart your computer and try again.\n\n---\n\n### Step 1.2: Install Claude Code\n\nIn the same Terminal, paste this and hit Enter:\n\n```\nnpm install -g @anthropic-ai/claude-code\n```\n\n**What you'll see:** A bunch of text scrolling. Wait for the prompt to come back (the blinking cursor on a fresh line).\n\n**Verify it worked:**\n```\nclaude --version\n```\n\nIf you see a version number, you're golden.\n\n---\n\n### Step 1.3: Log In to Claude Code\n\nIn Terminal, type:\n```\nclaude\n```\n\nIt will open a browser window asking you to log in. Use your Claude account. Click **Allow**.\n\nYou'll see a welcome message in your terminal. **Type `/exit` to close it for now.**\n\n---\n\n## Part 2: Install the `idea-to-prd` Skill (5 min)\n\n### Step 2.1: Make a Skills Folder\n\nIn Terminal, paste these one at a time:\n\n**Mac:**\n```\nmkdir -p ~/.claude/skills\ncd ~/.claude/skills\n```\n\n**Windows:**\n```\nmkdir %USERPROFILE%\\.claude\\skills\ncd %USERPROFILE%\\.claude\\skills\n```\n\n### Step 2.2: Download the Skill\n\nDownload **`idea-to-prd-skill.zip`** from the playbook page (the same page where you found this guide). Unzip it into your skills folder.\n\n**What you'll see:** A folder called `idea-to-prd` containing a file called `SKILL.md`.\n\n### Step 2.3: Verify\n\nStart Claude Code:\n```\nclaude\n```\n\nType:\n```\n/skill list\n```\n\nYou should see `idea-to-prd` in the list.\n\n✅ **Done. The skill is installed.**\n\n---\n\n## Part 3: Claude Project Setup (5 min)\n\n### Step 3.1: Open Claude Projects\n\n1. Go to **claude.ai**\n2. In the left sidebar, click **Projects**\n3. Click **+ New Project**\n4. Name it: `My Vibe Coder Workspace`\n\n### Step 3.2: Drop in the Skill\n\nIn your new Claude Project:\n1. Find the **Project Knowledge** section (right sidebar in most views)\n2. Upload the `SKILL.md` file from the skill folder\n3. Every chat you start in this project will now reference SKILL.md as background context\n\n### Step 3.3: Test It\n\nStart a new chat inside the project. Type:\n```\nI have an idea for an app. Use the idea-to-prd skill.\n```\n\nThen drop your idea. **Don't filter. Ramble.** Tangents welcome.\n\n**What you'll see:** Claude mirrors your idea back, runs the Scope Guard, asks you 5 questions, and produces a one-shot prompt.\n\n---\n\n## Part 4: Railway Setup (10 min)\n\n### Step 4.1: Create Account\n\n1. Go to **railway.com**\n2. Click **Sign Up**\n3. Use your GitHub account (easiest)\n4. Verify your email\n\n### Step 4.2: Add a Payment Method\n\nEven on free tier, Railway wants a card on file. They give you $5 free credit. **A small app costs about $5/month** to keep running, more if it gets traffic.\n\n### Step 4.3: Install Railway CLI\n\nIn Terminal:\n\n**Mac:**\n```\nbrew install railway\n```\n\n(If you don't have Homebrew: install from brew.sh first.)\n\n**Windows:**\n```\nnpm install -g @railway/cli\n```\n\n### Step 4.4: Log In\n\n```\nrailway login\n```\n\nThis opens a browser. Click Authorize.\n\n✅ **Done. You can deploy from your terminal now.**\n\n---\n\n## Part 5: Your First Practice Run (10 min)\n\n### Step 5.1: Make a Project Folder\n\nIn Terminal:\n```\nmkdir my-first-vibe-app\ncd my-first-vibe-app\n```\n\n### Step 5.2: Open Your Claude Project, Generate a PRD\n\nPick something **stupid simple** for practice. Examples:\n\n- A counter app that tracks how many cups of coffee you've had today\n- A notes app that timestamps everything you write\n- A list of your favorite books with star ratings\n\nDrop the idea into a chat in your Claude Project. Let it interview you. Get your PRD.\n\n### Step 5.3: Paste Into Claude Code\n\nBack in Terminal (in your `my-first-vibe-app` folder):\n```\nclaude\n```\n\nThen paste the **entire PRD** from your Claude Project chat. Hit Enter.\n\n**What you'll see:** Claude Code thinking, then writing files, then asking permission to install things. Type `y` to approve.\n\n**It takes 5-15 minutes for a small app.** Don't touch anything. Drink coffee. Watch.\n\n### Step 5.4: Test Locally\n\nWhen it's done, it will tell you something like \"run `npm run dev`.\" Do that:\n```\nnpm run dev\n```\n\nOpen the URL it shows you (usually `http://localhost:3000`). **You have a working app.** 🎉\n\n### Step 5.5: Deploy to Railway\n\n```\nrailway init\nrailway up\n```\n\nRailway gives you a public URL. Send it to a friend.\n\n---\n\n## 🆘 If Something Breaks\n\n### \"Command not found\" errors\n\n→ Close Terminal completely. Reopen it. Try again. (Your `PATH` needs a refresh after install.)\n\n### \"Permission denied\" on Mac\n\n→ Add `sudo` to the front of the command. It will ask for your computer password.\n\n### Claude Code stops mid-build\n\n→ Type `continue` and hit Enter. It picks up where it left off.\n\n### App works locally but not on Railway\n\n→ 90% of the time it's missing environment variables. In Railway dashboard, click your project → Variables → add the keys from your PRD.\n\n### You get totally stuck\n\n→ Screenshot the error. Drop it in the mastermind Slack/group chat. Someone has hit it before.\n\n---\n\n## 🧠 Habits to Build\n\n1. **Always read the PRD before pasting it.** If it has features you don't want, edit them OUT before sending to Claude Code. The Scope Guard helps but isn't perfect.\n\n2. **Save every PRD.** Make a folder called `prds/` and keep them all. They're your build history and your training data.\n\n3. **Don't fight the skill.** When Scope Guard flags something, take the cut more often than not. You can always add it later. You can't easily un-bloat an MVP.\n\n4. **Deploy early, deploy often.** A deployed broken thing is more useful than a perfect local thing. You can iterate live.\n\n5. **Brand voice doc gets reused.** Once you write a `BRAND_VOICE.md` for yourself, drop it into every project. Saves you from sounding like a robot in every app you build.\n\n---\n\n## ✅ You're Ready\n\nIf you got through Part 5, **you have everything the demo showed.** Every future app is:\n\n1. Idea → Claude Project → PRD (10 min)\n2. PRD → Claude Code → working app (20-40 min)\n3. Working app → Railway → live URL (5 min)\n\nThat's the whole loop. Welcome to vibe coding. ☕\n\n---\n\n**Questions?** Drop them in the group. **Want a 1:1?** Reach out to Jeremy.\n", "claude-settings": "{\n  \"permissions\": {\n    \"defaultMode\": \"acceptEdits\",\n    \"allow\": [\n      \"Bash(npm:*)\",\n      \"Bash(npx:*)\",\n      \"Bash(node:*)\",\n      \"Bash(git:*)\",\n      \"Bash(railway:*)\",\n      \"Bash(curl:*)\",\n      \"Bash(mkdir:*)\",\n      \"Bash(touch:*)\",\n      \"Bash(mv:*)\",\n      \"Bash(cp:*)\",\n      \"Bash(rm:*)\",\n      \"Bash(ls:*)\",\n      \"Bash(cat:*)\",\n      \"Bash(cd:*)\",\n      \"Bash(echo:*)\",\n      \"Bash(pwd:*)\",\n      \"Bash(tree:*)\",\n      \"Bash(playwright:*)\",\n      \"Bash(npx playwright:*)\",\n      \"Bash(tsc:*)\",\n      \"Bash(vite:*)\",\n      \"Bash(drizzle-kit:*)\",\n      \"Bash(psql:*)\",\n      \"Read\",\n      \"Write\",\n      \"Edit\",\n      \"Glob\",\n      \"Grep\",\n      \"WebFetch(domain:docs.anthropic.com)\",\n      \"WebFetch(domain:docs.claude.com)\",\n      \"WebFetch(domain:railway.app)\",\n      \"WebFetch(domain:railway.com)\",\n      \"WebFetch(domain:highlevel.com)\",\n      \"WebFetch(domain:gohighlevel.com)\",\n      \"WebFetch(domain:platform.openai.com)\",\n      \"WebFetch(domain:clerk.com)\"\n    ],\n    \"deny\": [\n      \"Bash(rm -rf /:*)\",\n      \"Bash(rm -rf ~:*)\",\n      \"Bash(sudo:*)\",\n      \"Bash(curl * | sh:*)\",\n      \"Bash(curl * | bash:*)\"\n    ]\n  },\n  \"skipDangerousModePermissionPrompt\": false\n}\n", "how-to-embed-logo": "# How to Embed the Logo So It NEVER Fails\n\n> **The bulletproof option.** Image data lives inside the HTML file. Zero external dependencies.\n\n## Why this matters\n\nExternal image URLs can fail for a dozen reasons during a live demo:\n- Conference room WiFi blocking certain CDNs\n- GoHighLevel CDN momentarily unavailable\n- HTTPS/CORS issues when opening the file locally\n- Browser cache showing an old version\n\nThe fix: encode the image as base64 and paste it directly into the HTML. The page becomes self-contained.\n\n---\n\n## Step 1 · Get the base64 string (60 seconds)\n\n### Option A: In your browser\n\n1. Open this URL in a new tab:\n   ```\n   https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/pMsWjanMfJ5zaAMeOIOW/media/69b1983c78565a3efb3fbb6a.png\n   ```\n\n2. Right-click the image → **Save Image As** → save as `logo.webp` to your desktop.\n\n3. Open this free converter in another tab:\n   ```\n   https://base64.guru/converter/encode/image\n   ```\n\n4. Upload your `logo.webp` file. Click \"Encode to base64\".\n\n5. Copy the entire output string (it'll be long — starts with `data:image/webp;base64,...`).\n\n### Option B: In Terminal (Mac/Linux)\n\n```bash\n# Download the image\ncurl -o logo.webp \"https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/pMsWjanMfJ5zaAMeOIOW/media/69b1983c78565a3efb3fbb6a.png\"\n\n# Convert to base64 and copy to clipboard\necho \"data:image/webp;base64,$(base64 -i logo.webp | tr -d '\\n')\" | pbcopy\n\n# The base64 string is now in your clipboard\n```\n\n### Option C: In Claude (just ask)\n\nOpen a new Claude conversation, paste:\n\n> Convert this image URL to a base64 data URI I can paste into HTML: https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/pMsWjanMfJ5zaAMeOIOW/media/69b1983c78565a3efb3fbb6a.png\n\n---\n\n## Step 2 · Replace the URL in your HTML\n\nOpen `audience-page.html` in any text editor.\n\nFind this line (it's in the hero section, looks long):\n\n```html\n<img src=\"https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/pMsWjanMfJ5zaAMeOIOW/media/69b1983c78565a3efb3fbb6a.png\" alt=\"100 Cups Mastermind\" class=\"hero-logo\" ...\n```\n\nReplace ONLY the URL inside `src=\"...\"` with your base64 string:\n\n```html\n<img src=\"data:image/webp;base64,UklGRiQ...[long string]...AAA==\" alt=\"100 Cups Mastermind\" class=\"hero-logo\" ...\n```\n\nSave. Open the file in your browser. The logo will load instantly, every time, even with no internet.\n\n---\n\n## Step 3 · Do the same for advanced-setup-page.html\n\nSame exact replacement. Same base64 string works in both files.\n\n---\n\n## Verifying it worked\n\n- Open the page **with WiFi turned OFF**\n- The logo should still display\n- That confirms it's embedded, not external\n\n---\n\n## Why I didn't do this for you\n\nThe sandbox where I'm running can't reach the GoHighLevel CDN — network is restricted. So I can't download the image and convert it. You can do it in 60 seconds though, and it's the only way to make the page truly bulletproof.\n\nIf this is too fiddly, just use the version with the JavaScript fallback I already delivered — if the image fails, it gracefully shows a styled text mark \"100 cups\" instead. No broken icon. Either way, the demo works.\n", "mining-prompt": "You're an analyst pulling product signal out of a messy meeting transcript. Read the transcript carefully and extract only the parts relevant to building a product. Ignore housekeeping, social pleasantries, off-topic tangents, and personal updates unless they reveal a constraint.\n\nOutput your findings in **exactly this structure** — no preamble, no commentary, no closing remarks:\n\n---\n\n## 📱 The App Idea\n\n**Working name:** [propose one if not stated]\n**Core problem it solves:** [one sentence]\n**The \"it just works\" moment:** [the dream user experience in 1-2 sentences]\n\n---\n\n## 🧱 Feature List Pulled From the Call\n\n| # | Feature | Who Pitched It | Notes |\n|---|---|---|---|\n| 1 | [feature name] | [name] | [context] |\n\n---\n\n## 🚨 Hard Constraints (Don't Miss These)\n\nList every constraint or guardrail the speakers explicitly named. Quote the speaker. Format:\n\n> \"[direct quote]\" — [name]\n\nThen explain what it means for the build in 1-2 sentences.\n\n---\n\n## 🧰 Tech Stack Already Decided in the Call\n\nBullet list of any platform, framework, language, hosting, or third-party tool the speakers committed to. Note rejected options too (\"NOT X — speaker said Y because...\").\n\n---\n\n## 👥 Stakeholders / Audience\n\n- **Primary user:** [name and role]\n- **Secondary users:** [list]\n- **Future users / commercial audience:** [if discussed]\n\n---\n\n## 💰 Business Model Hints\n\nAny pricing, billing, monetization, or commercial signals from the call. Quote the speaker if relevant.\n\n---\n\n## 🎬 Demo / Storytelling Hooks\n\nThings from the transcript that would make this product memorable to demo:\n- Who pitched what (so you can credit them publicly)\n- Constraints that became features\n- Quotable moments\n\n---\n\n## ❓ Open Questions\n\nThings the transcript did NOT answer that the user needs to clarify before building:\n- [question 1]\n- [question 2]\n\n---\n\n## ⏭️ Recommended Next Step\n\nEither:\n- **Ready for `idea-to-prd`** — paste this brief into the skill and answer the 5 questions\n- **Need clarification first** — list the 1-3 things to ask the user before scoping\n\n---\n\nNow extract from this transcript:\n\n[PASTE TRANSCRIPT HERE]\n"});
+
+  function copyText(textOrKey, btn, event) {
+    if (event) event.stopPropagation();
+    const text = copyVault[textOrKey] || textOrKey;
+
+    const onSuccess = () => {
+      btn.classList.add('copied');
+      const originalHTML = btn.innerHTML;
+      const isHiddenBtn = btn.classList.contains('copy-hidden-btn');
+      btn.innerHTML = isHiddenBtn
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+      const toast = btn.parentElement.querySelector('.copy-toast');
+      if (toast) toast.classList.add('show');
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = originalHTML;
+        if (toast) toast.classList.remove('show');
+      }, 1800);
+    };
+
+    const onFail = () => {
+      btn.style.background = 'var(--rust)';
+      btn.style.color = 'var(--paper)';
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '!';
+      setTimeout(() => {
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.innerHTML = originalHTML;
+      }, 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(() => legacyCopy(text, onSuccess, onFail));
+    } else {
+      legacyCopy(text, onSuccess, onFail);
+    }
+  }
+
+  function legacyCopy(text, onSuccess, onFail) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) onSuccess(); else onFail();
+    } catch (e) {
+      onFail();
+    }
+  }
+
+  // ===== TOGGLE COLLAPSIBLE COPY BLOCK =====
+  function toggleCollapsible(barEl, event) {
+    if (event) event.stopPropagation();
+    const wrapper = barEl.closest('.copy-collapsible');
+    if (wrapper) wrapper.classList.toggle('expanded');
+  }
+
+  // ===== TOGGLE PRE-CALL STEP =====
+  function togglePrecallStep(row) {
+    row.classList.toggle('done');
+  }
+
+  // ===== AUTO-ATTACH COPY BUTTONS TO ALL <pre> BLOCKS =====
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('pre').forEach(pre => {
+      // Skip if already has a copy button
+      if (pre.querySelector('.pre-copy-btn')) return;
+      // Skip if inside a copy-collapsible — that has its own copy mechanism
+      if (pre.closest('.copy-collapsible')) return;
+      const code = pre.querySelector('code');
+      if (!code) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'pre-copy-btn';
+      btn.setAttribute('aria-label', 'Copy code');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyText(code.textContent, btn, e);
+      });
+      pre.appendChild(btn);
+    });
+
+    // Stop step row from toggling when copy-collapsible elements inside it are clicked
+    document.querySelectorAll('.copy-collapsible').forEach(el => {
+      el.addEventListener('click', (e) => e.stopPropagation());
+    });
+  });
+</script>
+
+</body>
+</html>
