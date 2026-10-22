@@ -25,11 +25,11 @@ Each week, mastermind members who opt in get paired. One hosts, one is the guest
 | Risk | Why it kills it | Defuse |
 |---|---|---|
 | **No-shows / flaking** | One flake leaves a hole on Jason's podcast calendar, and trust drops fast | Opt-in closes 7+ days ahead. Both people confirm within 48h or the slot goes to a **bench** pair. Track reliability quietly, and put repeat flakes on hold for a season. |
-| **Uneven episode quality** | Weak member-hosted episodes hurt Jason's show | An auto-generated **host prep brief**, a fixed 5-segment format, and **Jason (or a producer) approves before anything publishes** (Byron Rule). Episodes that aren't approved stay internal. |
+| **Uneven episode quality** | Weak member-hosted episodes hurt Jason's show | An auto-generated **host prep brief**, a fixed 5-segment format, and **Jason approves before anything publishes** (Byron Rule). Episodes that aren't approved stay internal. |
 | **"Fantasy league" turns competitive** | Scoreboards ranking people damage a giving culture | Only **giving** earns points: referrals passed, intros made, episodes completed. No public rankings on downloads or popularity. Show season stats as "the Circle gave 41 referrals," not a ranked list. |
 | **Stale Referral Cards** | If the cards go stale, nobody trusts them and the system dies | The "Right now" ask **expires after 30 days**. The app nudges with "Still looking for X?" and one tap renews it. Stale cards are dimmed in the Circle. |
 | **Notification fatigue** | People mute it, and then updates stop mattering | Notify only when **referral fields** change, never other profile edits. Default to a **weekly digest**, with real-time as an opt-in. Collapse multiple edits into one event per member per day. |
-| **Group too small** | With 12 people, a season is fine. With 6, pairings repeat fast | Ask the real headcount. Under ~8, run biweekly, or pull Academy grads in as guests sooner. |
+| **Too many episodes for one approver** | ~20 Founders could mean up to 10 pairs a week if everyone opts in. Jason approving every episode, plus its clips and posts, becomes the bottleneck and the feed floods. | Cap it at **2 matchups a week** (configurable). Extra opt-ins roll to the next week first. Jason gets one **weekly approval queue** with everything for an episode bundled, not a stream of single tasks. |
 | **Rights / releases** | Repurposing a guest's face and voice without a release is a liability | A one-tap recording/repurposing release is part of confirming the slot. No release means no recording. |
 | **Scope explosion** | Connector is single-user (Jason) today. This needs real multi-user | It depends on the Phase 2 "Team Collaboration / multi-tenant" item. Build that first, or validate manually (Phase 0) before writing code. |
 | **Building recording/editing tools** | Months of work that Riverside or Zoom plus Opus Clip already cover | **Don't build it.** Store a recording link. Claude works from the transcript only. |
@@ -77,11 +77,11 @@ Also:
 ### Weekly flow
 
 1. **Mon:** "Opt in for next week?" One tap. (Can also opt in for the whole season.)
-2. **Wed:** Opt-in closes. The pairing engine proposes matchups. **Jason/admin reviews and can override.** Pairings publish.
+2. **Wed:** Opt-in closes. The pairing engine proposes matchups. **Jason reviews and can override.** Pairings publish.
 3. **Within 48h:** Both people confirm and sign the release. The guest picks a slot from the host's calendar link. Unconfirmed slots go to the bench.
 4. **3 days before:** The host gets a **Prep Brief** (Claude-generated from the guest's Referral Card, profile, past episodes, and Connector notes): 5 questions, the guest's "right now" ask, and one recent win to bring up.
 5. **Record** (Riverside/Zoom, outside the app). The host pastes the recording link.
-6. **After:** The transcript gets uploaded or pulled in, and Claude drafts **episode assets as Task-Gate tasks**: title, show notes, 3–5 clip timestamps with hook lines, a 100 Cups social post for each person, and a thank-you note. Jason/producer approves before anything is published.
+6. **After:** The transcript gets uploaded or pulled in, and Claude drafts **episode assets as Task-Gate tasks**: title, show notes, 3–5 clip timestamps with hook lines, a 100 Cups social post for each person, and a thank-you note. Jason approves the bundle (episode, clips, posts) in one pass before anything is published.
 
 ### Episode format (fixed, keeps quality consistent)
 
@@ -103,7 +103,7 @@ A greedy scorer is enough to start. No optimizer needed for groups under 50.
 
 ### Seasons & "fantasy" layer
 
-- **Season** = one full rotation (roughly as many weeks as there are members). It ends with a recap episode hosted by Jason.
+- **Season** = everyone hosts once and is a guest once. With ~20 Founders that's 20 episodes, so at 2 a week a season runs **~10 weeks** (about 4 seasons a year, leaving room for breaks). With 190 possible pairs, nobody needs to repeat a pairing for years. It ends with a recap episode hosted by Jason.
 - **Points (giving only):** episode completed +3, referral passed +2, referral closed +5, thank-you sent +1.
 - **Season awards** instead of leaderboards: "Most Generous," "Best Connector," "Founders Circle MVP." These make good content too.
 - **Founders Circle badge** on original members' profiles. Academy grads earn a "Season X Guest" badge on their first episode, and that badge is their invitation into the mastermind.
@@ -140,7 +140,7 @@ New routes: `/circle` (feed + cards), `/me/card`, `/league` (this week, my match
 | **1. Multi-user foundation** | Clerk orgs/members, roles (admin, founder, member, guest). This is the Phase 2 multi-tenant item from PHASE_2_NOTES. | Members can log in and see the Circle. |
 | **2. Referral Cards + notifications** | Card editor (typed and voice-fill), version history, Circle feed, weekly digest, 30-day expiry nudges, Referral Ledger. | Worth having even if the league never ships. |
 | **3. League engine** | Opt-in, pairing proposal + admin override, confirmations, release, bench, prep brief. | A full season runs in-app. |
-| **4. Episode content pipeline** | Recording link + transcript in, Claude drafts assets as gated tasks, approval flow for Jason/producer. | Episode-to-published-clips turnaround under 48h. |
+| **4. Episode content pipeline** | Recording link + transcript in, Claude drafts assets as gated tasks, weekly approval queue for Jason. | Episode-to-published-clips turnaround under 48h. |
 | **5. Cohort on-ramp** | Academy guest invites, Founder × Academy pairing priority, badges, season awards/recap. | First Academy grad converts into the mastermind. |
 
 Phase 2 is valuable on its own, which lowers the risk. If the league fizzles, the Referral Cards still pay off.
@@ -156,8 +156,8 @@ Phase 2 is valuable on its own, which lowers the risk. If the league fizzles, th
 ## 9. Open questions for Jeremy / Jason
 
 1. What exactly is "the Circle" in the current app (screen/table names)? This plan needs to be mapped onto it.
-2. How many members are in the Founders group right now? How many per Academy cohort?
-3. Who approves episodes before they publish: Jason, a producer, or the host pair?
+2. ~~Founders headcount~~ About 20. Still open: how many per Academy cohort?
+3. ~~Approver~~ Jason approves every episode.
 4. Recording tool (Riverside, Zoom, StreamYard)? Clip tool (Opus Clip, Descript)?
-5. Weekly or biweekly cadence? How many episodes a week can the podcast feed absorb?
+5. Is 2 member episodes a week the right cap for the feed, alongside Jason's own interviews?
 6. Should Academy guests see the Circle's Referral Cards before they're members, or only after?
